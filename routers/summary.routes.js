@@ -1,8 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const customer = require("../schemas/customer.schema");
-const vendor = require("../schemas/vendor.schema");
-const product = require("../schemas/product.schema");
 const summary = require("../schemas/summary.schema");
 const { auth, validateObjectId } = require("../middleware/auth");
 
