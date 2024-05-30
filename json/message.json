@@ -1,0 +1,24 @@
+{
+    "HTTP_CODE": {
+        "ALL_REQUIRED": 499,
+        "OK": 200,
+        "CREATED": 201,
+        "NOT_FOUND": 404,
+        "BAD_REQUEST": 400,
+        "UNAUTHORIZED": 401,
+        "INTERNAL_SERVER_ERROR": 500,
+        "EXISTED": 409,
+        "NO_ENOUGH_STOCK":410
+    },
+    "MESSAGE": {
+        "ALL_REQUIRED": "All fields are required!",
+        "OK": "Successful",
+        "CREATED": "Created",
+        "NOT_FOUND": "Not Found",
+        "BAD_REQUEST":"Bad request",
+        "UNAUTHORIZED": "Unauthorized",
+        "INTERNAL_SERVER_ERROR": "Internal Server Error",
+        "EXISTED": "User already exists",
+        "NO_ENOUGH_STOCK":"No enough stock available"
+    }
+}
