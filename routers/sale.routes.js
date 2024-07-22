@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const sale = require("../schemas/sale.schema");
-const customer = require("../schemas/customer.schema");
-const product = require("../schemas/product.schema");
-const summary = require("../schemas/summary.schema");
-const { auth, validateObjectId } = require("../middleware/auth");
+const sale = require("../models/sale.model");
+const customer = require("../models/customer.model");
+const product = require("../models/product.model");
+const summary = require("../models/summary.model");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
 
 const response = require("../helpers/response.helper");
 

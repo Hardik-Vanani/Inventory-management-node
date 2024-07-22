@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { auth, validateObjectId } = require("../middleware/auth");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
 const { HTTP_CODE, MESSAGE } = require("../json/message.json");
 const response = require("../helpers/response.helper");
 
-const vendor = require("../schemas/vendor.schema");
+const vendor = require("../models/vendor.model");
 const { error } = require("console");
 
 router.get("/", auth, async (req, res) => {

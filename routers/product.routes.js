@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const product = require("../schemas/product.schema");
-const { auth, validateObjectId } = require("../middleware/auth");
+const product = require("../models/product.model");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
 
 const response = require("../helpers/response.helper");
 const { request } = require("http");

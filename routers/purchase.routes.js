@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const purchase = require("../schemas/purchase.schema");
-const vendor = require("../schemas/vendor.schema");
-const product = require("../schemas/product.schema");
-const summary = require("../schemas/summary.schema");
-const { auth, validateObjectId } = require("../middleware/auth");
+const purchase = require("../models/purchase.model");
+const vendor = require("../models/vendor.model");
+const product = require("../models/product.model");
+const summary = require("../models/summary.model");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
 
 const response = require("../helpers/response.helper");
 const { create } = require("hbs");

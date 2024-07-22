@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const { auth, validateObjectId } = require("../middleware/auth");
-const customer = require("../schemas/customer.schema");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
+const customer = require("../models/customer.model");
 const response = require("../helpers/response.helper");
 
 router.get("/", auth, async (req, res) => {

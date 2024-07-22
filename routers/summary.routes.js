@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const summary = require("../schemas/summary.schema");
-const { auth, validateObjectId } = require("../middleware/auth");
+const summary = require("../models/summary.model");
+const { auth, validateObjectId } = require("../middleware/auth.middleware");
 
 const response = require("../helpers/response.helper");
 
