@@ -66,6 +66,20 @@ const response = {
             message: MESSAGE.NO_ENOUGH_STOCK,
         });
     },
+
+    TOKEN_EXPIRED({ res, err }) {
+        res.status(HTTP_CODE.UNAUTHORIZED).json({
+            success: false,
+            message: err.message,
+            expiredAt: err.expiredAt,
+        });
+    },
+    TOKEN_NEEDED({ res, err }) {
+        res.status(HTTP_CODE.UNAUTHORIZED).json({
+            success: false,
+            message: err.message,
+        });
+    },
 };
 
 module.exports = response;

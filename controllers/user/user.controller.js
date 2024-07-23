@@ -1,6 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const response = require("../helpers/response.helper");
+const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
 
             return response.OK({ res, payload: { id, name, token } });
         } catch (error) {
-            console.error(error);
+            console.error("Error logging user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
@@ -39,6 +39,7 @@ module.exports = {
 
             return response.OK({ res, payload: { newUser } });
         } catch (error) {
+            console.error("Error creating user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },

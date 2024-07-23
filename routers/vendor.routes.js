@@ -1,78 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { auth, validateObjectId } = require("../middleware/auth.middleware");
-const { HTTP_CODE, MESSAGE } = require("../json/message.json");
-const response = require("../helpers/response.helper");
+const auth = require("../middleware/auth.middleware");
 
-const vendor = require("../models/vendor.model");
-const { error } = require("console");
+const {
+    VENDOR: { APIS, VALIDATOR },
+} = require("../controllers");
 
-router.get("/", auth, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: true, error: req.error });
-        }
-        const vendorData = await vendor.find(req.query);
-        return response.OK({ res, count: vendorData.length, payload: { vendorData } });
-    } catch (error) {
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
+router.get("/", auth, APIS.getVendor);
 
-router.post("/create", auth, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: true, error: req.error });
-        }
+router.post("/", auth, VALIDATOR.createVendor, APIS.createVendor);
 
-        const { vendorName, mobileNo } = req.body;
-        if (!vendorName || !mobileNo) return response.ALL_REQUIRED({ res });
+router.put("/:id", auth, VALIDATOR.updateVendor, APIS.updateVendor);
 
-        const createVendor = await vendor.create({ vendorName, mobileNo, user_id: req.user.id });
-
-        return response.CREATED({ res, payload: { createVendor } });
-    } catch (error) {
-        console.error("Error creating vendor:", error);
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
-
-router.put("/update/:id", auth, validateObjectId, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: true, error: req.error });
-        }
-
-        const { vendorName, mobileNo } = req.body;
-        if (!vendorName || !mobileNo) return response.ALL_REQUIRED({ res });
-
-        const updatedVendor = await vendor.findByIdAndUpdate(req.params.id, req.body, { new: true });
-
-        if (!updatedVendor) {
-            return response.NOT_FOUND({ res });
-        }
-
-        return response.OK({ res, payload: { updatedVendor } });
-    } catch (error) {
-        console.error(error);
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
-
-router.delete("/delete/:id", auth, validateObjectId, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: true, error: req.error });
-        }
-        const deleteVendor = await vendor.findByIdAndDelete(req.params.id);
-        if (!deleteVendor) {
-            return response.NOT_FOUND({ res });
-        }
-        return response.OK({ res, payload: { deleteVendor } });
-    } catch (error) {
-        console.error(error);
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
+router.delete("/:id", auth, VALIDATOR.deleteVendor, APIS.deleteVendor);
 
 module.exports = router;

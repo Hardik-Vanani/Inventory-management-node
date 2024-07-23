@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const schema = new mongoose.Schema({
     vendorName: String,
     mobileNo: {
-        type: Number,
+        type: String,
         maxlength: 10,
         required: true,
     },

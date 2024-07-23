@@ -1,6 +1,5 @@
 const { validate } = require("express-validation");
 const Joi = require("joi");
-const { loginUser } = require("./user.controller");
 
 module.exports = {
     loginUser: validate({

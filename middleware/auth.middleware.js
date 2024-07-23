@@ -1,5 +1,4 @@
 const response = require("../helpers/response.helper");
-
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
@@ -9,11 +8,9 @@ const auth = (req, res, next) => {
         jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
-                    const customeError = { name: err.name, message: err.message, expiredAt: err.expiredAt };
-                    req.error = customeError;
+                    return response.TOKEN_EXPIRED({ res, err });
                 } else {
-                    const customeError = { name: err.name, message: err.message };
-                    req.error = customeError;
+                    return response.TOKEN_NEEDED({ res, err });
                 }
             }
             req.user = decoded;
@@ -26,16 +23,4 @@ const auth = (req, res, next) => {
     }
 };
 
-const validateObjectId = (req, res, next) => {
-    try {
-        const id = req.params.id;
-        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-            return response.BAD_REQUEST({ res });
-        }
-        next();
-    } catch (error) {
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-};
-
-module.exports = { auth, validateObjectId };
+module.exports = auth;
