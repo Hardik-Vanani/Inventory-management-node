@@ -1,46 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const summary = require("../models/summary.model");
-const { auth, validateObjectId } = require("../middleware/auth.middleware");
+const auth = require("../middleware/auth.middleware");
 
-const response = require("../helpers/response.helper");
+const {
+    SUMMARY: { APIS, VALIDATOR },
+} = require("../controllers");
 
-router.get("/", auth, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: false, error: req.error });
-        }
+router.get("/", auth, APIS.getSummary);
 
-        const user_id = req.user.id;
-        const transactionData = await summary
-            .find({ ...req.query, user_id })
-            .populate({ path: "productID", select: "-__v -user_id" })
-            .populate({ path: "vendorID", select: "-__v -user_id" })
-            .populate({ path: "customerID", select: "-__v -user_id" })
-            .select("-__v");
-
-        return response.OK({ res, count: transactionData.length, payload: { transactionData } });
-    } catch {
-        console.error(error);
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
-
-router.delete("/delete/:id", auth, validateObjectId, async (req, res) => {
-    try {
-        if (req.error) {
-            return res.status(401).json({ success: false, error: req.error });
-        }
-
-        const findSummary = await summary.findById(req.params.id);
-        if (!findSummary) return response.NOT_FOUND({ res });
-
-        const deleteSummary = await summary.findByIdAndDelete(req.params.id);
-        return response.OK({ res, payload: { deleteSummary } });
-    } catch (error) {
-        console.error(error);
-        return response.INTERNAL_SERVER_ERROR({ res });
-    }
-});
+router.delete("/delete/:id", auth, VALIDATOR.deleteSummary, APIS.deleteSummary);
 
 module.exports = router;
