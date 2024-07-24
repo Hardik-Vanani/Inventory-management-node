@@ -92,7 +92,7 @@ module.exports = {
             );
 
             const updateSale = await DB.sale.findByIdAndUpdate(
-                req.params.id,
+                { _id: req.params.id, user_id },
                 {
                     ...req.body,
                     amount: qty * price,
@@ -100,7 +100,7 @@ module.exports = {
                 { new: true }
             );
 
-            // Update transaction report 
+            // Update transaction report
             await DB.summary.findOneAndUpdate(
                 { transactionId: req.params.id },
                 {
@@ -135,7 +135,10 @@ module.exports = {
                 { new: true }
             );
 
-            const deleteSale = await DB.sale.findByIdAndDelete(req.params.id);
+            const deleteSale = await DB.sale.findByIdAndDelete({
+                _id: req.params.id,
+                user_id: req.user.id,
+            });
             return response.OK({ res, payload: { deleteSale } });
         } catch (error) {
             console.error("Error deleting sale: ", error);

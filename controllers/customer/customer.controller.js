@@ -4,9 +4,13 @@ const DB = require("../../models");
 module.exports = {
     getCustomer: async (req, res) => {
         try {
-            const user_id = req.user.id;
             // const query = { ...req.query, user_id };
-            const customerData = await DB.customer.find({ ...req.query, user_id }).select("-__v");
+            const customerData = await DB.customer
+                .find({
+                    ...req.query,
+                    user_id: req.user.id,
+                })
+                .select("-__v");
             return response.OK({ res, count: customerData.length, payload: { customerData } });
         } catch (error) {
             console.error("Error getting customer: ", error);
@@ -29,7 +33,6 @@ module.exports = {
 
     updateCustomer: async (req, res) => {
         try {
-
             const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
             if (!findCustomer) return response.NOT_FOUND({ res });
 

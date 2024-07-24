@@ -20,7 +20,6 @@ module.exports = {
     createPurchase: async (req, res) => {
         try {
             const { bill_no, vendorDetail, productDetail, qty, price, date } = req.body;
-            if (!bill_no || !vendorDetail || !productDetail || !qty || !price) return response.ALL_REQUIRED({ res });
 
             const user_id = req.user.id;
             const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id });
@@ -52,7 +51,7 @@ module.exports = {
                 transaction_date: date,
                 user_id,
             });
-            
+
             return response.CREATED({ res, payload: { createPurchase } });
         } catch (error) {
             console.error("Error creating purchase: ", error);
@@ -84,7 +83,10 @@ module.exports = {
 
             // Update Purchase Bill
             const updateProduct = await DB.purchase.findByIdAndUpdate(
-                req.params.id,
+                {
+                    _id: req.params.id,
+                    user_id,
+                },
                 {
                     ...req.body,
                     amount: qty * price,
@@ -128,8 +130,10 @@ module.exports = {
             const newStock = productData.stock - findPurchase.qty;
             await DB.product.findByIdAndUpdate(findPurchase.productDetail, { stock: newStock }, { new: true });
 
-            const user_id = req.user.id;
-            const deletePurchase = await DB.purchase.findByIdAndDelete({ _id: req.params.id, user_id });
+            const deletePurchase = await DB.purchase.findByIdAndDelete({
+                _id: req.params.id,
+                user_id: req.user.id,
+            });
             return response.OK({ res, payload: { deletePurchase } });
         } catch (error) {
             console.error("Error deleting purchase: ", error);

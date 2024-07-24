@@ -4,8 +4,7 @@ const DB = require("../../models");
 module.exports = {
     getVendor: async (req, res) => {
         try {
-            const user_id = req.user.id;
-            const vendorData = await DB.vendor.find({ ...req.query, user_id });
+            const vendorData = await DB.vendor.find({ ...req.query, user_id: req.user.id });
             return response.OK({ res, count: vendorData.length, payload: { vendorData } });
         } catch (error) {
             console.error("Error getting vendor: ", error);
@@ -28,7 +27,14 @@ module.exports = {
 
     updateVendor: async (req, res) => {
         try {
-            const updatedVendor = await DB.vendor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updatedVendor = await DB.vendor.findByIdAndUpdate(
+                {
+                    _id: req.params.id,
+                    user_id: req.user.id,
+                },
+                req.body,
+                { new: true }
+            );
 
             if (!updatedVendor) {
                 return response.NOT_FOUND({ res });
@@ -43,7 +49,10 @@ module.exports = {
 
     deleteVendor: async (req, res) => {
         try {
-            const deleteVendor = await DB.vendor.findByIdAndDelete(req.params.id);
+            const deleteVendor = await DB.vendor.findByIdAndDelete({
+                _id: req.params.id,
+                user_id: req.user.id,
+            });
             if (!deleteVendor) {
                 return response.NOT_FOUND({ res });
             }

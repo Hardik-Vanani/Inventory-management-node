@@ -24,7 +24,10 @@ module.exports = {
             const findSummary = await DB.summary.findById(req.params.id);
             if (!findSummary) return response.NOT_FOUND({ res });
 
-            const deleteSummary = await DB.summary.findByIdAndDelete(req.params.id);
+            const deleteSummary = await DB.summary.findByIdAndDelete({
+                _id: req.params.id,
+                user_id: req.user.id,
+            });
             return response.OK({ res, payload: { deleteSummary } });
         } catch (error) {
             console.error("Error deleting report: ", error);

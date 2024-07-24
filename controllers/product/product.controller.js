@@ -4,8 +4,12 @@ const DB = require("../../models");
 module.exports = {
     getProduct: async (req, res) => {
         try {
-            const user_id = req.user.id;
-            const productData = await DB.product.find({ ...req.query, user_id }).select("-__v");
+            const productData = await DB.product
+                .find({
+                    ...req.query,
+                    user_id: req.user.id,
+                })
+                .select("-__v");
             return response.OK({ res, count: productData.length, payload: { productData } });
         } catch (error) {
             console.error("Error getting product: ", error);
