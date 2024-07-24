@@ -4,7 +4,7 @@ const Joi = require("joi");
 module.exports = {
     createCustomer: validate({
         body: Joi.object({
-            customerName: Joi.string.required(),
+            customerName: Joi.string().required(),
             mobileNo: Joi.number().max(9999999999).required(),
         }),
     }),

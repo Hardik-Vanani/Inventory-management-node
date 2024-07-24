@@ -1,4 +1,3 @@
-const { trace } = require("console");
 const { Schema, model, default: mongoose } = require("mongoose");
 
 let summary = new Schema({
@@ -7,6 +6,10 @@ let summary = new Schema({
         ref: "product",
     },
     transaction_type: String,
+    transactionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "summary",
+    },
     vendorID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "vendor",

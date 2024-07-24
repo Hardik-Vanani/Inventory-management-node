@@ -29,7 +29,6 @@ module.exports = {
 
     updateCustomer: async (req, res) => {
         try {
-            const { customerName, mobileNo } = req.body;
 
             const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
             if (!findCustomer) return response.NOT_FOUND({ res });
@@ -48,7 +47,7 @@ module.exports = {
             const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
             if (!findCustomer) return response.NOT_FOUND({ res });
 
-            const deleteCustomer = await customer.findByIdAndDelete(req.params.id);
+            const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);
 
             return response.OK({ res, payload: { deleteCustomer } });
         } catch (error) {

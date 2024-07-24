@@ -14,7 +14,7 @@ module.exports = {
 
             return response.OK({ res, count: transactionData.length, payload: { transactionData } });
         } catch {
-            console.error(error);
+            console.error("Error getting report: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
@@ -27,7 +27,7 @@ module.exports = {
             const deleteSummary = await DB.summary.findByIdAndDelete(req.params.id);
             return response.OK({ res, payload: { deleteSummary } });
         } catch (error) {
-            console.error(error);
+            console.error("Error deleting report: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },

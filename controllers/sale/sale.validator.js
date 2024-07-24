@@ -4,23 +4,21 @@ const Joi = require("joi");
 module.exports = {
     createSale: validate({
         body: Joi.object({
-            bill_no: Joi.string.required(),
+            bill_no: Joi.number().required(),
             customerDetail: Joi.required(),
             productDetail: Joi.required(),
             qty: Joi.number().required(),
             price: Joi.number().required(),
-            amount: Joi.number().required(),
         }),
     }),
 
     updateSale: validate({
         body: Joi.object({
-            bill_no: Joi.string().required(),
+            bill_no: Joi.number().required(),
             customerDetail: Joi.required(),
             productDetail: Joi.required(),
             qty: Joi.number().required(),
-            price: Joi.number().required(),
-            amount: Joi.number().required(),
+            price: Joi.number().required(),     
         }),
 
         params: Joi.object({

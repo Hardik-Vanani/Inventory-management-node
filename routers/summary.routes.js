@@ -8,6 +8,6 @@ const {
 
 router.get("/", auth, APIS.getSummary);
 
-router.delete("/delete/:id", auth, VALIDATOR.deleteSummary, APIS.deleteSummary);
+router.delete("/:id", auth, VALIDATOR.deleteSummary, APIS.deleteSummary);
 
 module.exports = router;

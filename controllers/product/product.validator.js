@@ -4,7 +4,7 @@ const Joi = require("joi");
 module.exports = {
     createProduct: validate({
         body: Joi.object({
-            productName: Joi.string.required(),
+            productName: Joi.string().required(),
         }),
     }),
 

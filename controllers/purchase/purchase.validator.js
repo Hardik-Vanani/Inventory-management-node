@@ -5,23 +5,21 @@ const { createPurchase, updatePurchase, deletePurchase } = require("./purchase.c
 module.exports = {
     createPurchase: validate({
         body: Joi.object({
-            bill_no: Joi.number.required(),
+            bill_no: Joi.number().required(),
             vendorDetail: Joi.required(),
             productDetail: Joi.required(),
             qty: Joi.number().required(),
             price: Joi.number().required(),
-            amount: Joi.number().required(),
         }),
     }),
 
     updatePurchase: validate({
         body: Joi.object({
-            bill_no: Joi.number.required(),
+            bill_no: Joi.number().required(),
             vendorDetail: Joi.required(),
             productDetail: Joi.required(),
             qty: Joi.number().required(),
             price: Joi.number().required(),
-            amount: Joi.number().required(),
         }),
         params: Joi.object({
             id: Joi.string()

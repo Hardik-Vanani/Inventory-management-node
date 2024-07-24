@@ -4,7 +4,7 @@ const Joi = require("joi");
 module.exports = {
     createVendor: validate({
         body: Joi.object({
-            vendorName: Joi.string.required(),
+            vendorName: Joi.string().required(),
             mobileNo: Joi.number().max(9999999999).required(),
         }),
     }),

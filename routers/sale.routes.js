@@ -8,10 +8,10 @@ const {
 
 router.get("/", auth, APIS.getSale);
 
-router.post("/create", auth, VALIDATOR.createSale, APIS.createSale);
+router.post("/", auth, VALIDATOR.createSale, APIS.createSale);
 
-router.put("/update/:id", auth, VALIDATOR.updateSale, APIS.updateSale);
+router.put("/:id", auth, VALIDATOR.updateSale, APIS.updateSale);
 
-router.delete("/delete/:id", auth, VALIDATOR.deleteSale, APIS.deleteSale);
+router.delete("/:id", auth, VALIDATOR.deleteSale, APIS.deleteSale);
 
 module.exports = router;

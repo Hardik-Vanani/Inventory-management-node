@@ -13,7 +13,7 @@ module.exports = {
 
             return response.OK({ res, count: saleData.length, payload: { saleData } });
         } catch (error) {
-            console.error(error);
+            console.error("Error getting sale: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
@@ -44,10 +44,11 @@ module.exports = {
             const amount = qty * price;
             const saleData = await DB.sale.create({ ...req.body, amount, user_id });
 
-            // Create trasaction summary
+            // Create trasaction report
             await DB.summary.create({
                 productID: productDetail,
                 transaction_type: "Sale",
+                transactionId: saleData._id,
                 customerID: customerDetail,
                 qty,
                 price,
@@ -58,7 +59,7 @@ module.exports = {
 
             return response.CREATED({ res, payload: { saleData } });
         } catch (error) {
-            console.error(error);
+            console.error("Error creating sale: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
@@ -90,10 +91,32 @@ module.exports = {
                 { new: true }
             );
 
-            const updateSale = await DB.sale.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updateSale = await DB.sale.findByIdAndUpdate(
+                req.params.id,
+                {
+                    ...req.body,
+                    amount: qty * price,
+                },
+                { new: true }
+            );
+
+            // Update transaction report 
+            await DB.summary.findOneAndUpdate(
+                { transactionId: req.params.id },
+                {
+                    customerID: customerDetail,
+                    productID: productDetail,
+                    qty,
+                    price,
+                    amount: qty * price,
+                    transaction_date: date,
+                },
+                { new: true }
+            );
+
             return response.OK({ res, payload: { updateSale } });
         } catch (error) {
-            console.error(error);
+            console.error("Error updating sale: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
@@ -115,7 +138,7 @@ module.exports = {
             const deleteSale = await DB.sale.findByIdAndDelete(req.params.id);
             return response.OK({ res, payload: { deleteSale } });
         } catch (error) {
-            console.error(error);
+            console.error("Error deleting sale: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },

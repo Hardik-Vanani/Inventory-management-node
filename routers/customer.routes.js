@@ -8,7 +8,7 @@ const {
 
 router.get("/", auth, APIS.getCustomer);
 
-router.post("/create", auth, VALIDATOR.createCustomer, APIS.createCustomer);
+router.post("/", auth, VALIDATOR.createCustomer, APIS.createCustomer);
 
 router.put("/:id", auth, VALIDATOR.updateCustomer, APIS.updateCustomer);
 
