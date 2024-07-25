@@ -17,5 +17,5 @@ app.use("/api", require("./routers/index"));
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
-    console.log(`PORT : ${process.env.PORT} 🖥️  🚀`);
+    console.log(`PORT : ${process.env.PORT} 🚀 🖥️  🚀`);
 });

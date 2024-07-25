@@ -1,12 +1,17 @@
 const { Schema, model } = require("mongoose");
 
-let productSchema = new Schema({
-    productName: String,
-    stock: {
-        type: Number,
-        default: 0,
+let productSchema = new Schema(
+    {
+        productName: String,
+        stock: {
+            type: Number,
+            default: 0,
+        },
+        user_id: String,
     },
-    user_id: String,
-});
+    {
+        versionKey: false,
+    }
+);
 
 module.exports = model("product", productSchema, "product");
