@@ -7,9 +7,8 @@ module.exports = {
             const user_id = req.user.id;
             const purchaseData = await DB.purchase
                 .find({ ...req.query, user_id })
-                .populate({ path: "vendorDetail", select: "-__v -user_id" })
-                .populate({ path: "productDetail", select: "-__v -user_id" })
-                .select("-__v");
+                .populate({ path: "vendorDetail", select: "-user_id" })
+                .populate({ path: "productDetail", select: "-user_id" });
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);

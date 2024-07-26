@@ -7,9 +7,8 @@ module.exports = {
             const user_id = req.user.id;
             const saleData = await DB.sale
                 .find({ ...req.query, user_id })
-                .populate({ path: "customerDetail", select: "-__v -user_id" })
-                .populate({ path: "productDetail", select: "-__v -user_id" })
-                .select("-__v");
+                .populate({ path: "customerDetail", select: "-user_id" })
+                .populate({ path: "productDetail", select: " -user_id" });
 
             return response.OK({ res, count: saleData.length, payload: { saleData } });
         } catch (error) {

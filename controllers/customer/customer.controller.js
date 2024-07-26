@@ -5,12 +5,10 @@ module.exports = {
     getCustomer: async (req, res) => {
         try {
             // const query = { ...req.query, user_id };
-            const customerData = await DB.customer
-                .find({
-                    ...req.query,
-                    user_id: req.user.id,
-                })
-                .select("-__v");
+            const customerData = await DB.customer.find({
+                ...req.query,
+                user_id: req.user.id,
+            });
             return response.OK({ res, count: customerData.length, payload: { customerData } });
         } catch (error) {
             console.error("Error getting customer: ", error);

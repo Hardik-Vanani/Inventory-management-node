@@ -7,10 +7,9 @@ module.exports = {
             const user_id = req.user.id;
             const transactionData = await DB.summary
                 .find({ ...req.query, user_id })
-                .populate({ path: "productID", select: "-__v -user_id" })
-                .populate({ path: "vendorID", select: "-__v -user_id" })
-                .populate({ path: "customerID", select: "-__v -user_id" })
-                .select("-__v");
+                .populate({ path: "productID", select: "-user_id" })
+                .populate({ path: "vendorID", select: "-user_id" })
+                .populate({ path: "customerID", select: "-user_id" });
 
             return response.OK({ res, count: transactionData.length, payload: { transactionData } });
         } catch {
