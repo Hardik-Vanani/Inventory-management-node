@@ -33,4 +33,4 @@ let summary = new Schema(
     }
 );
 
-module.exports = model("summary", summary, "summary");
+module.exports = model("report", summary, "report");

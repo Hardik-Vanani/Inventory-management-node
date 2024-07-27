@@ -5,5 +5,5 @@ module.exports = {
     product: require("./product.model"),
     purchase: require("./purchase.model"),
     sale: require("./sale.model"),
-    summary: require("./summary.model"),
+    report: require("./report.model"),
 };

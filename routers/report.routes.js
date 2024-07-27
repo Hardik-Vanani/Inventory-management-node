@@ -3,11 +3,11 @@ const router = express.Router();
 const auth = require("../middleware/auth.middleware");
 
 const {
-    SUMMARY: { APIS, VALIDATOR },
+    REPORT: { APIS, VALIDATOR },
 } = require("../controllers");
 
-router.get("/", auth, APIS.getSummary);
+router.get("/", auth, APIS.getReports);
 
-router.delete("/:id", auth, VALIDATOR.deleteSummary, APIS.deleteSummary);
+router.delete("/:id", auth, VALIDATOR.deleteReport, APIS.deleteReport);
 
 module.exports = router;

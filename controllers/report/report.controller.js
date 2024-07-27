@@ -2,10 +2,10 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
-    getSummary: async (req, res) => {
+    getReports: async (req, res) => {
         try {
             const user_id = req.user.id;
-            const transactionData = await DB.summary
+            const transactionData = await DB.report
                 .find({ ...req.query, user_id })
                 .populate({ path: "productID", select: "-user_id" })
                 .populate({ path: "vendorID", select: "-user_id" })
@@ -18,12 +18,12 @@ module.exports = {
         }
     },
 
-    deleteSummary: async (req, res) => {
+    deleteReport: async (req, res) => {
         try {
-            const findSummary = await DB.summary.findById(req.params.id);
+            const findSummary = await DB.report.findById(req.params.id);
             if (!findSummary) return response.NOT_FOUND({ res });
 
-            const deleteSummary = await DB.summary.findByIdAndDelete({
+            const deleteSummary = await DB.report.findByIdAndDelete({
                 _id: req.params.id,
                 user_id: req.user.id,
             });

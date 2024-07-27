@@ -44,7 +44,7 @@ module.exports = {
             const saleData = await DB.sale.create({ ...req.body, amount, user_id });
 
             // Create trasaction report
-            await DB.summary.create({
+            await DB.report.create({
                 productID: productDetail,
                 transaction_type: "Sale",
                 transactionId: saleData._id,
@@ -100,7 +100,7 @@ module.exports = {
             );
 
             // Update transaction report
-            await DB.summary.findOneAndUpdate(
+            await DB.report.findOneAndUpdate(
                 { transactionId: req.params.id },
                 {
                     customerID: customerDetail,

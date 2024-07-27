@@ -39,7 +39,7 @@ module.exports = {
             const createPurchase = await DB.purchase.create({ ...req.body, amount, user_id });
 
             // Create transaction report
-            await DB.summary.create({
+            await DB.report.create({
                 productID: productDetail,
                 transaction_type: "Purchase",
                 transactionId: createPurchase._id,
@@ -94,7 +94,7 @@ module.exports = {
             );
 
             // Update transaction report
-            await DB.summary.findOneAndUpdate(
+            await DB.report.findOneAndUpdate(
                 { transactionId: req.params.id },
                 {
                     vendorID: vendorDetail,

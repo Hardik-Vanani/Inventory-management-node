@@ -29,8 +29,8 @@ module.exports = {
         VALIDATOR: require("./sale/sale.validator"),
     },
 
-    SUMMARY: {
-        APIS: require("./summary/summary.controller"),
-        VALIDATOR: require("./summary/summary.validator"),
+    REPORT: {
+        APIS: require("./report/report.controller"),
+        VALIDATOR: require("./report/report.validator"),
     },
 };
