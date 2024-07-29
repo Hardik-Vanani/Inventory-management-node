@@ -17,9 +17,7 @@ module.exports = {
 
     createProduct: async (req, res) => {
         try {
-            const { productName } = req.body;
-
-            const createProduct = await DB.product.create({ productName, user_id: req.user.id });
+            const createProduct = await DB.product.create({ ...req.body, user_id: req.user.id });
 
             return response.OK({ res, payload: { createProduct } });
         } catch (error) {

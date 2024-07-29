@@ -14,9 +14,7 @@ module.exports = {
 
     createVendor: async (req, res) => {
         try {
-            const { vendorName, mobileNo } = req.body;
-
-            const createVendor = await DB.vendor.create({ vendorName, mobileNo, user_id: req.user.id });
+            const createVendor = await DB.vendor.create({ ...req.body, user_id: req.user.id });
 
             return response.CREATED({ res, payload: { createVendor } });
         } catch (error) {

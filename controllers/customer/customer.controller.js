@@ -4,7 +4,6 @@ const DB = require("../../models");
 module.exports = {
     getCustomer: async (req, res) => {
         try {
-            // const query = { ...req.query, user_id };
             const customerData = await DB.customer.find({
                 ...req.query,
                 user_id: req.user.id,
@@ -18,9 +17,7 @@ module.exports = {
 
     createCustomer: async (req, res) => {
         try {
-            const { customerName, mobileNo } = req.body;
-
-            const createCustomer = await DB.customer.create({ customerName, mobileNo, user_id: req.user.id });
+            const createCustomer = await DB.customer.create({ ...req.body, user_id: req.user.id });
 
             return response.OK({ res, payload: { createCustomer } });
         } catch (error) {
