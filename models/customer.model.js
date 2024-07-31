@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
     {
         customerName: String,
         mobileNo: {
@@ -15,4 +15,4 @@ const schema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("customer", schema, "customer");
+module.exports = model("customer", schema, "customer");
