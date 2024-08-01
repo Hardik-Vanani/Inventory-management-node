@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const schema = new mongoose.Schema(
+const schema = new Schema(
     {
         vendorName: String,
         mobileNo: {
@@ -12,7 +12,8 @@ const schema = new mongoose.Schema(
     },
     {
         versionKey: false,
+        timestamps: true,
     }
 );
 
-module.exports = mongoose.model("vendor", schema, "vendor");
+module.exports = model("vendor", schema, "vendor");

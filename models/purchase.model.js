@@ -34,6 +34,7 @@ let purchase_product = new Schema(
     },
     {
         versionKey: false,
+        timestamps: true,
     }
 );
 

@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
             });
         }
 
-        if (err instanceof ValidationError) {
+        if (err.details.params) {
             const errorDetails = err.details.params.map((detail) => ({
                 field: detail.context.key,
                 message: detail.message,

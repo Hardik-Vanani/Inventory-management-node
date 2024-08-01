@@ -34,6 +34,7 @@ let sale_schema = new Schema(
     },
     {
         versionKey: false,
+        timestamps: true,
     }
 );
 
