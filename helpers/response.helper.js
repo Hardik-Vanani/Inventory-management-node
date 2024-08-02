@@ -17,6 +17,7 @@ const response = {
             payload,
         });
     },
+
     ALL_REQUIRED({ res, payload = {} }) {
         res.status(HTTP_CODE.ALL_REQUIRED).json({
             success: false,
@@ -74,6 +75,7 @@ const response = {
             expiredAt: err.expiredAt,
         });
     },
+    
     TOKEN_NEEDED({ res, err }) {
         res.status(HTTP_CODE.UNAUTHORIZED).json({
             success: false,
