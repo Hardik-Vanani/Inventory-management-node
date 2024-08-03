@@ -5,14 +5,18 @@ module.exports = {
     createVendor: validate({
         body: Joi.object({
             vendorName: Joi.string().required(),
-            mobileNo: Joi.number().max(9999999999).required(),
+            mobileNo: Joi.string()
+                .pattern(/^[0-9]{10}$/) // Example pattern for a 10-digit phone number
+                .required(),
         }),
     }),
 
     updateVendor: validate({
         body: Joi.object({
-            vendorName: Joi.string(),
-            mobileNo: Joi.number().max(9999999999),
+            vendorName: Joi.string().required(),
+            mobileNo: Joi.string()
+                .pattern(/^[0-9]{10}$/) // Example pattern for a 10-digit phone number
+                .required(),
         }),
 
         params: Joi.object({

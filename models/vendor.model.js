@@ -2,10 +2,12 @@ const { Schema, model } = require("mongoose");
 
 const schema = new Schema(
     {
-        vendorName: String,
+        vendorName: {
+            type: String,
+            required: true,
+        },
         mobileNo: {
             type: String,
-            maxlength: 10,
             required: true,
         },
         user_id: String,
