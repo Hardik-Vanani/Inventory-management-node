@@ -4,10 +4,9 @@ const DB = require("../../models");
 module.exports = {
     getCustomer: async (req, res) => {
         try {
-            const customerData = await DB.customer.find({
-                ...req.query,
-                user_id: req.user.id,
-            });
+            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt -user_id");
+
             return response.OK({ res, count: customerData.length, payload: { customerData } });
         } catch (error) {
             console.error("Error getting customer: ", error);

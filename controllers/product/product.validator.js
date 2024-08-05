@@ -11,6 +11,8 @@ module.exports = {
     updateProduct: validate({
         body: Joi.object({
             productName: Joi.string().required(),
+            stock: Joi.number().required(),
+            _id: Joi.string().required(),
         }),
 
         params: Joi.object({

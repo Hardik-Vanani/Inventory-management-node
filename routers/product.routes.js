@@ -6,7 +6,7 @@ const {
     PRODUCT: { APIS, VALIDATOR },
 } = require("../controllers");
 
-router.get("/", auth, APIS.getProduct);
+router.get("/:id?", auth, APIS.getProduct);
 
 router.post("/", auth, VALIDATOR.createProduct, APIS.createProduct);
 

@@ -5,14 +5,19 @@ module.exports = {
     createCustomer: validate({
         body: Joi.object({
             customerName: Joi.string().required(),
-            mobileNo: Joi.number().max(9999999999).required(),
+            mobileNo: Joi.string()
+                .pattern(/^[0-9]{10}$/)
+                .required(),
         }),
     }),
 
     updateCustomer: validate({
         body: Joi.object({
             customerName: Joi.string().required(),
-            mobileNo: Joi.number().max(9999999999),
+            mobileNo: Joi.string()
+                .pattern(/^[0-9]{10}$/)
+                .required(),
+            _id: Joi.string().required(),
         }),
 
         params: Joi.object({

@@ -4,8 +4,7 @@ const schema = new Schema(
     {
         customerName: String,
         mobileNo: {
-            type: Number,
-            maxlength: 10,
+            type: String,
             required: true,
         },
         user_id: String,

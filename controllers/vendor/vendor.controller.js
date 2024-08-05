@@ -7,7 +7,7 @@ module.exports = {
     getVendor: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id -_id");
+            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id");
 
             return response.OK({ res, count: vendorData.length, payload: { vendorData } });
         } catch (error) {

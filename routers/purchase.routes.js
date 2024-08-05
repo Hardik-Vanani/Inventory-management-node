@@ -6,12 +6,16 @@ const {
     PURCHASE: { APIS, VALIDATOR },
 } = require("../controllers");
 
-router.get("/", auth, APIS.getPurchase);
+/* Get Apis */
+router.get("/:id?", auth, APIS.getPurchase);
 
+/* Post Apis */
 router.post("/", auth, VALIDATOR.createPurchase, APIS.createPurchase);
 
+/* Put Apis */
 router.put("/:id", auth, VALIDATOR.updatePurchase, APIS.updatePurchase);
 
+/* Delete Apis */
 router.delete("/:id", auth, VALIDATOR.deletePurchase, APIS.deletePurchase);
 
 module.exports = router;

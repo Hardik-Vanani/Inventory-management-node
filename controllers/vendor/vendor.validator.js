@@ -17,6 +17,7 @@ module.exports = {
             mobileNo: Joi.string()
                 .pattern(/^[0-9]{10}$/) // Example pattern for a 10-digit phone number
                 .required(),
+            _id: Joi.string().required(),
         }),
 
         params: Joi.object({
