@@ -3,7 +3,7 @@ const { Schema, model, default: mongoose } = require("mongoose");
 let purchase_product = new Schema(
     {
         bill_no: {
-            type: Number,
+            type: String,
             require: true,
         },
         vendorDetail: {

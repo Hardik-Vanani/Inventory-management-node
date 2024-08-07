@@ -4,11 +4,12 @@ const DB = require("../../models");
 module.exports = {
     getPurchase: async (req, res) => {
         try {
-            const user_id = req.user.id;
+            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
             const purchaseData = await DB.purchase
-                .find({ ...req.query, user_id })
-                .populate({ path: "vendorDetail", select: "-user_id" })
-                .populate({ path: "productDetail", select: "-user_id" });
+                .find(filter)
+                .populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" })
+                .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
+                .select("-createdAt -updatedAt -user_id");
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
@@ -64,7 +65,7 @@ module.exports = {
 
             const user_id = req.user.id;
 
-            const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id });
+            const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id }).select("-createdAt -updatedAt");
             const productData = await DB.product.findOne({ _id: productDetail, user_id });
             const oldPurchase = await DB.purchase.findById(req.params.id);
 

@@ -1,7 +1,6 @@
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
-/* APIS for vendor */
 module.exports = {
     /* Get vendor API */
     getVendor: async (req, res) => {
