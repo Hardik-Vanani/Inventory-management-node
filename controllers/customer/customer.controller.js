@@ -2,6 +2,7 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
+    /* Get customer API */
     getCustomer: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
@@ -14,6 +15,7 @@ module.exports = {
         }
     },
 
+    /* Create customer API */
     createCustomer: async (req, res) => {
         try {
             const createCustomer = await DB.customer.create({ ...req.body, user_id: req.user.id });
@@ -25,6 +27,7 @@ module.exports = {
         }
     },
 
+    /* Update customer API */
     updateCustomer: async (req, res) => {
         try {
             const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
@@ -39,6 +42,7 @@ module.exports = {
         }
     },
 
+    /* Delete customer API */
     deleteCustomer: async (req, res) => {
         try {
             const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
