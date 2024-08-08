@@ -66,8 +66,8 @@ module.exports = {
             const user_id = req.user.id;
 
             const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id }).select("-createdAt -updatedAt");
-            const productData = await DB.product.findOne({ _id: productDetail, user_id });
-            const oldPurchase = await DB.purchase.findById(req.params.id);
+            const productData = await DB.product.findOne({ _id: productDetail, user_id }).select("-createdAt -updatedAt");
+            const oldPurchase = await DB.purchase.findById(req.params.id).select("-user_id -createdAt -updatedAt");
 
             if (!vendorData || !productData || !oldPurchase) return response.NOT_FOUND({ res });
 
