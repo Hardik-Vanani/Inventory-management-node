@@ -6,8 +6,10 @@ const {
     REPORT: { APIS, VALIDATOR },
 } = require("../controllers");
 
+/* Get Apis */
 router.get("/", auth, APIS.getReports);
 
+/* Delete Apis */
 router.delete("/:id", auth, VALIDATOR.deleteReport, APIS.deleteReport);
 
 module.exports = router;

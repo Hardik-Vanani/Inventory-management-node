@@ -5,10 +5,10 @@ const {
     USER: { APIS, VALIDATOR },
 } = require("../controllers");
 
-// Login User
+/* Login user Api */
 router.post("/signin", VALIDATOR.loginUser, APIS.loginUser);
 
-// Create new credential
+/* Create new credential Api */
 router.post("/signup", VALIDATOR.createUser, APIS.createUser);
 
 module.exports = router;

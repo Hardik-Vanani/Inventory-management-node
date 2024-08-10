@@ -2,6 +2,7 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
+    /* Get product API */
     getProduct: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
@@ -14,6 +15,7 @@ module.exports = {
         }
     },
 
+    /* Create product API */
     createProduct: async (req, res) => {
         try {
             const createProduct = await DB.product.create({ ...req.body, user_id: req.user.id });
@@ -25,6 +27,7 @@ module.exports = {
         }
     },
 
+    /* Update product API */
     updateProduct: async (req, res) => {
         try {
             const findProduct = await DB.product.find({ _id: req.params.id, user_id: req.user.id });
@@ -39,6 +42,7 @@ module.exports = {
         }
     },
 
+    /* Delete product API */
     deleteProduct: async (req, res) => {
         try {
             const findProduct = await DB.product.find({ _id: req.params.id, user_id: req.user.id });

@@ -6,12 +6,16 @@ const {
     SALE: { APIS, VALIDATOR },
 } = require("../controllers");
 
+/* Get Apis */
 router.get("/:id?", auth, APIS.getSale);
 
+/* Post Apis */
 router.post("/", auth, VALIDATOR.createSale, APIS.createSale);
 
+/* Put Apis */
 router.put("/:id", auth, VALIDATOR.updateSale, APIS.updateSale);
 
+/* Delete Apis */
 router.delete("/:id", auth, VALIDATOR.deleteSale, APIS.deleteSale);
 
 module.exports = router;
