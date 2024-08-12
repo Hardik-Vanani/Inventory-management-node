@@ -2,6 +2,7 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
+    /* Get report API */
     getReports: async (req, res) => {
         try {
             const user_id = req.user.id;
@@ -19,6 +20,7 @@ module.exports = {
         }
     },
 
+    /* Delete report API */
     deleteReport: async (req, res) => {
         try {
             const findSummary = await DB.report.findById(req.params.id);
