@@ -2,6 +2,7 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
+    /* Get Sale Bill API */
     getSale: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
@@ -18,6 +19,7 @@ module.exports = {
         }
     },
 
+    /* Create Sale Bill API */
     createSale: async (req, res) => {
         try {
             const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;
@@ -64,6 +66,7 @@ module.exports = {
         }
     },
 
+    /* Update Sale Bill API */
     updateSale: async (req, res) => {
         try {
             const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;
@@ -121,6 +124,7 @@ module.exports = {
         }
     },
 
+    /* Delete Sale Bill API */
     deleteSale: async (req, res) => {
         try {
             const findSale = await DB.sale.findById(req.params.id);

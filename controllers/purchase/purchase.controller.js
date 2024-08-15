@@ -2,7 +2,7 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 
 module.exports = {
-    /* Get purchase API */
+    /* Get Purchase Bill API */
     getPurchase: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
@@ -18,7 +18,7 @@ module.exports = {
         }
     },
 
-    /* Create purchase API */
+    /* Create Purchase Bill API */
     createPurchase: async (req, res) => {
         try {
             const { bill_no, vendorDetail, productDetail, qty, price, date } = req.body;
@@ -61,7 +61,7 @@ module.exports = {
         }
     },
 
-    /* Update purchase API */
+    /* Update Purchase Bill API */
     updatePurchase: async (req, res) => {
         try {
             const { bill_no, vendorDetail, productDetail, qty, price, date } = req.body;
@@ -118,7 +118,7 @@ module.exports = {
         }
     },
 
-    /* Delete purchase API */
+    /* Delete Purchase Bill API */
     deletePurchase: async (req, res) => {
         try {
             const findPurchase = await DB.purchase.findById(req.params.id);
