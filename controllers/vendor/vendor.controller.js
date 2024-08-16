@@ -30,7 +30,6 @@ module.exports = {
     /* Update vendor API */
     updateVendor: async (req, res) => {
         try {
-            console.log("Updating vendor");
             const updatedVendor = await DB.vendor
                 .findOneAndUpdate(
                     {

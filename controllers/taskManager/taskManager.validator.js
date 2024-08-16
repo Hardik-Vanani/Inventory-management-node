@@ -2,21 +2,19 @@ const { validate } = require("express-validation");
 const Joi = require("joi");
 
 module.exports = {
-    createVendor: validate({
+    createTasks: validate({
         body: Joi.object({
-            vendorName: Joi.string().required(),
-            mobileNo: Joi.string()
-                .pattern(/^[0-9]{10}$/)
-                .required(),
+            taskName: Joi.string().required(),
+            status: Joi.string().required(),
+            date: Joi.string().required(),
         }),
     }),
 
-    updateVendor: validate({
+    updateTask: validate({
         body: Joi.object({
-            vendorName: Joi.string().required(),
-            mobileNo: Joi.string()
-                .pattern(/^[0-9]{10}$/)
-                .required(),
+            taskName: Joi.string().required(),
+            status: Joi.string().required(),
+            date: Joi.string().optional(),
             _id: Joi.string().optional(),
         }),
 
@@ -28,7 +26,7 @@ module.exports = {
         }),
     }),
 
-    deleteVendor: validate({
+    deleteTask: validate({
         params: Joi.object({
             id: Joi.string()
                 .pattern(/^[0-9a-fA-F]{24}$/)

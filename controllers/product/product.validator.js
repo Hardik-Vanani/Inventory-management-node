@@ -12,7 +12,7 @@ module.exports = {
         body: Joi.object({
             productName: Joi.string().required(),
             stock: Joi.number().required(),
-            _id: Joi.string().required(),
+            _id: Joi.string().optional(),
         }),
 
         params: Joi.object({

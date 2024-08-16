@@ -23,7 +23,7 @@ module.exports = {
             price: Joi.number().required(),
             amount: Joi.number().required(),
             date: Joi.string().required(),
-            _id: Joi.string().required(),
+            _id: Joi.string().optional(),
         }),
         params: Joi.object({
             id: Joi.string()

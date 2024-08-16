@@ -5,10 +5,18 @@ module.exports = {
     /* Get customer API */
     getCustomer: async (req, res) => {
         try {
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt -user_id");
+            const filter = req.params.id
+                ? { _id: req.params.id, user_id: req.user.id }
+                : { ...req.query, user_id: req.user.id };
+            const customerData = await DB.customer
+                .find(filter)
+                .select("-createdAt -updatedAt -user_id");
 
-            return response.OK({ res, count: customerData.length, payload: { customerData } });
+            return response.OK({
+                res,
+                count: customerData.length,
+                payload: { customerData },
+            });
         } catch (error) {
             console.error("Error getting customer: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -18,7 +26,10 @@ module.exports = {
     /* Create customer API */
     createCustomer: async (req, res) => {
         try {
-            const createCustomer = await DB.customer.create({ ...req.body, user_id: req.user.id });
+            const createCustomer = await DB.customer.create({
+                ...req.body,
+                user_id: req.user.id,
+            });
 
             return response.OK({ res, payload: { createCustomer } });
         } catch (error) {
@@ -30,10 +41,16 @@ module.exports = {
     /* Update customer API */
     updateCustomer: async (req, res) => {
         try {
-            const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
-            if (!findCustomer) return response.NOT_FOUND({ res });
-
-            const updatedCustomer = await DB.customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updatedCustomer = await DB.customer
+                .findOneAndUpdate(
+                    {
+                        _id: req.params.id,
+                        user_id: req.user.id,
+                    },
+                    req.body,
+                    { new: true }
+                )
+                .select("-createdAt -updatedAt -user_id");
 
             return response.OK({ res, payload: { updatedCustomer } });
         } catch (error) {
@@ -45,10 +62,15 @@ module.exports = {
     /* Delete customer API */
     deleteCustomer: async (req, res) => {
         try {
-            const findCustomer = await DB.customer.findOne({ _id: req.params.id, user_id: req.user.id });
+            const findCustomer = await DB.customer.findOne({
+                _id: req.params.id,
+                user_id: req.user.id,
+            });
             if (!findCustomer) return response.NOT_FOUND({ res });
 
-            const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);
+            const deleteCustomer = await DB.customer.findByIdAndDelete(
+                req.params.id
+            );
 
             return response.OK({ res, payload: { deleteCustomer } });
         } catch (error) {

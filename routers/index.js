@@ -1,5 +1,6 @@
 const routes = require("express")();
 
+routes.use("/task", require("./taskManager.routes"))
 routes.use("/user", require("./user.routes"));
 routes.use("/vendor", require("./vendor.routes"));
 routes.use("/customer", require("./customer.routes"));

@@ -33,4 +33,9 @@ module.exports = {
         APIS: require("./report/report.controller"),
         VALIDATOR: require("./report/report.validator"),
     },
+
+    TASKMANAGER: {
+        APIS: require("./taskManager/taskManager.controller"),
+        VALIDATOR: require("./taskManager/taskManager.validator"),
+    },
 };

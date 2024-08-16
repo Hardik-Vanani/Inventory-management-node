@@ -1,4 +1,5 @@
 module.exports = {
+    taskManager: require("./taskManager.model"),
     user: require("./user.model"),
     vendor: require("./vendor.model"),
     customer: require("./customer.model"),
@@ -7,3 +8,4 @@ module.exports = {
     sale: require("./sale.model"),
     report: require("./report.model"),
 };
+    

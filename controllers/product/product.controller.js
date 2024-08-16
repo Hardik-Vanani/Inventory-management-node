@@ -33,7 +33,7 @@ module.exports = {
             const findProduct = await DB.product.find({ _id: req.params.id, user_id: req.user.id });
             if (!findProduct) return response.NOT_FOUND({ res });
 
-            const updateProduct = await DB.product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            const updateProduct = await DB.product.findOneAndUpdate(req.params.id, req.body, { new: true });
 
             return response.OK({ res, payload: { updateProduct } });
         } catch (error) {
