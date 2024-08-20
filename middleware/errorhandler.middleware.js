@@ -2,6 +2,7 @@ const { ValidationError } = require("express-validation");
 
 const errorHandler = (err, req, res, next) => {
     if (err instanceof ValidationError) {
+        /* Check body error */
         if (err.details.body) {
             const errorDetails = err.details.body.map((detail) => ({
                 field: detail.context.key,
@@ -14,6 +15,7 @@ const errorHandler = (err, req, res, next) => {
             });
         }
 
+        /* Check params error */
         if (err.details.params) {
             const errorDetails = err.details.params.map((detail) => ({
                 field: detail.context.key,
