@@ -25,6 +25,7 @@ module.exports = {
             date: Joi.string().required(),
             _id: Joi.string().optional(),
         }),
+        
         params: Joi.object({
             id: Joi.string()
                 .pattern(/^[0-9a-fA-F]{24}$/)
