@@ -10,7 +10,7 @@ module.exports = {
                 : { ...req.query, user_id: req.user.id };
             const customerData = await DB.customer
                 .find(filter)
-                .select("-createdAt -updatedAt -user_id");
+                .select("-user_id -createdAt -updatedAt");
 
             return response.OK({
                 res,
