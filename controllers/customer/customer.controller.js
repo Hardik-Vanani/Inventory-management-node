@@ -50,7 +50,7 @@ module.exports = {
                     req.body,
                     { new: true }
                 )
-                .select("-createdAt -updatedAt -user_id");
+                .select("-user_id -createdAt -updatedAt");
 
             return response.OK({ res, payload: { updatedCustomer } });
         } catch (error) {
