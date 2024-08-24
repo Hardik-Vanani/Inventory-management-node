@@ -10,7 +10,7 @@ module.exports = {
                 .find(filter)
                 .populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" })
                 .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
-                .select("-createdAt -updatedAt -user_id");
+                .select("-user_id -createdAt -updatedAt");
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
