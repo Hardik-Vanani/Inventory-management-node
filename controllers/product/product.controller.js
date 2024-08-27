@@ -6,7 +6,7 @@ module.exports = {
     getProduct: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const productData = await DB.product.find(filter).select(" -createdAt -updatedAt -user_id");
+            const productData = await DB.product.find(filter).select("-user_id -createdAt -updatedAt");
 
             return response.OK({ res, count: productData.length, payload: { productData } });
         } catch (error) {
