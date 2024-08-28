@@ -6,11 +6,7 @@ module.exports = {
     getPurchase: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const purchaseData = await DB.purchase
-                .find(filter)
-                .populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" })
-                .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
-                .select("-createdAt -updatedAt -user_id");
+            const purchaseData = await DB.purchase.find(filter).populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" }).populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" }).select("-createdAt -updatedAt -user_id");
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
@@ -21,7 +17,7 @@ module.exports = {
     /* Create Purchase Bill API */
     createPurchase: async (req, res) => {
         try {
-            const { bill_no, vendorDetail, productDetail, qty, price, date } = req.body;
+            const { vendorDetail, productDetail, qty, price, date } = req.body;
 
             const user_id = req.user.id;
             const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id });
@@ -64,7 +60,7 @@ module.exports = {
     /* Update Purchase Bill API */
     updatePurchase: async (req, res) => {
         try {
-            const { bill_no, vendorDetail, productDetail, qty, price, date } = req.body;
+            const { vendorDetail, productDetail, qty, price, date } = req.body;
 
             const user_id = req.user.id;
 
