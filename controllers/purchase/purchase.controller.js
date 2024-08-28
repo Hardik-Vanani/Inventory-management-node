@@ -6,7 +6,12 @@ module.exports = {
     getPurchase: async (req, res) => {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const purchaseData = await DB.purchase.find(filter).populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" }).populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" }).select("-createdAt -updatedAt -user_id");
+
+            const purchaseData = await DB.purchase
+                .find(filter)
+                .populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" })
+                .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
+                .select("-user_id -createdAt -updatedAt");
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
