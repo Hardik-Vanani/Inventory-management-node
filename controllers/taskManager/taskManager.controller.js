@@ -32,16 +32,14 @@ module.exports = {
     /* Update Task Manager API */
     updateTask: async (req, res) => {
         try {
-            const updateTask = await DB.taskManager
-                .findOneAndUpdate(
-                    {
-                        _id: req.params.id,
-                        user_id: req.user.id,
-                    },
-                    req.body,
-                    { new: true }
-                )
-                .select("-user_id");
+            const updateTask = await DB.taskManager.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    user_id: req.user.id,
+                },
+                req.body,
+                { new: true }
+            );
 
             if (!updateTask) {
                 return response.NOT_FOUND({ res });

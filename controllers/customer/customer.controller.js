@@ -5,12 +5,8 @@ module.exports = {
     /* Get customer API */
     getCustomer: async (req, res) => {
         try {
-            const filter = req.params.id
-                ? { _id: req.params.id, user_id: req.user.id }
-                : { ...req.query, user_id: req.user.id };
-            const customerData = await DB.customer
-                .find(filter)
-                .select("-user_id -createdAt -updatedAt");
+            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const customerData = await DB.customer.find(filter).select("-user_id -createdAt -updatedAt");
 
             return response.OK({
                 res,
@@ -41,16 +37,14 @@ module.exports = {
     /* Update customer API */
     updateCustomer: async (req, res) => {
         try {
-            const updatedCustomer = await DB.customer
-                .findOneAndUpdate(
-                    {
-                        _id: req.params.id,
-                        user_id: req.user.id,
-                    },
-                    req.body,
-                    { new: true }
-                )
-                .select("-user_id -createdAt -updatedAt");
+            const updatedCustomer = await DB.customer.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    user_id: req.user.id,
+                },
+                req.body,
+                { new: true }
+            );
 
             return response.OK({ res, payload: { updatedCustomer } });
         } catch (error) {
@@ -68,9 +62,7 @@ module.exports = {
             });
             if (!findCustomer) return response.NOT_FOUND({ res });
 
-            const deleteCustomer = await DB.customer.findByIdAndDelete(
-                req.params.id
-            );
+            const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);
 
             return response.OK({ res, payload: { deleteCustomer } });
         } catch (error) {
