@@ -16,7 +16,9 @@ module.exports = {
             if (!ismatch) return response.UNAUTHORIZED({ res });
 
             const id = user._id,
-                name = user.username;
+            name = user.username;
+
+            // Generate JWT token
             const token = jwt.sign({ id, name }, process.env.SECRET_KEY, { expiresIn: "5d" });
 
             return response.OK({ res, payload: { id, name, token } });
@@ -34,6 +36,7 @@ module.exports = {
             const existingUser = await DB.user.findOne({ username });
             if (existingUser) return response.EXISTED({ res });
 
+            // Password hashed by bcryptjs 
             const hashedPassword = await bcryptjs.hash(password, 10);
             const newUser = await DB.user.create({ username, password: hashedPassword });
 
