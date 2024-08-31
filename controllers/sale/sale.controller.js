@@ -139,6 +139,7 @@ module.exports = {
                 { new: true }
             );
 
+            
             const deleteSale = await DB.sale.findByIdAndDelete({
                 _id: req.params.id,
                 user_id: req.user.id,
