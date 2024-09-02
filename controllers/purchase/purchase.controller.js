@@ -7,7 +7,15 @@ module.exports = {
         try {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
 
-            const purchaseData = await DB.purchase.find(filter).populate({ path: "vendorDetail", select: "-user_id -createdAt -updatedAt" }).populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" }).select("-user_id -createdAt -updatedAt");
+            const purchaseData = await DB.purchase
+                .find(filter)
+                .populate({
+                    path: "vendorDetail",
+                    select: "-user_id -createdAt -updatedAt",
+                })
+                .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
+                .select("-user_id -createdAt -updatedAt");
+
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
@@ -123,7 +131,7 @@ module.exports = {
 
             const productData = await DB.product.findById(findPurchase.productDetail);
 
-            // Check stock for purchase 
+            // Check stock for purchase
             if (productData.stock <= findPurchase.qty) {
                 return response.NO_ENOUGH_STOCK({ res });
             }

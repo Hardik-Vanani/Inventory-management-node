@@ -5,7 +5,16 @@ module.exports = {
     /* Get Task Manager API */
     getTasks: async (req, res) => {
         try {
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const filter = req.params.id
+                ? {
+                      _id: req.params.id,
+                      user_id: req.user.id,
+                  }
+                : {
+                      ...req.query,
+                      user_id: req.user.id,
+                  };
+                  
             const taskData = await DB.taskManager.find(filter).select("-user_id");
 
             return response.OK({ res, count: taskData.length, payload: { taskData } });
