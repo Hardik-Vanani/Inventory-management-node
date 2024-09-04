@@ -19,7 +19,7 @@ module.exports = {
         }
     },
 
-    /* Create customer API */
+    /* Create new customer API */
     createCustomer: async (req, res) => {
         try {
             const createCustomer = await DB.customer.create({

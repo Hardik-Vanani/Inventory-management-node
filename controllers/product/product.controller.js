@@ -15,7 +15,7 @@ module.exports = {
         }
     },
 
-    /* Create product API */
+    /* Create new product API */
     createProduct: async (req, res) => {
         try {
             const createProduct = await DB.product.create({ ...req.body, user_id: req.user.id });
