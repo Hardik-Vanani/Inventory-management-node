@@ -24,7 +24,7 @@ module.exports = {
         }
     },
 
-    /* Create Sale Bill API */
+    /* Create new Sale Bill API */
     createSale: async (req, res) => {
         try {
             const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;

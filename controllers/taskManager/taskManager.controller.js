@@ -24,7 +24,7 @@ module.exports = {
         }
     },
 
-    /* Create Task manager API */
+    /* Create new Task manager API */
     createTask: async (req, res) => {
         try {
             const taskData = await DB.taskManager.create({

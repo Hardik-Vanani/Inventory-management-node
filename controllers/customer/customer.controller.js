@@ -34,7 +34,7 @@ module.exports = {
         }
     },
 
-    /* Update customer API */
+    /* Update existing customer API */
     updateCustomer: async (req, res) => {
         try {
             const updatedCustomer = await DB.customer.findOneAndUpdate(
