@@ -1,4 +1,5 @@
 module.exports = {
+    //Apis and validations
     USER: {
         APIS: require("./user/user.controller"),
         VALIDATOR: require("./user/user.validator"),
