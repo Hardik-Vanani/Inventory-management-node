@@ -1,5 +1,6 @@
 const { ValidationError } = require("express-validation");
 
+// Execute after error come from any routes
 const errorHandler = (err, req, res, next) => {
     if (err instanceof ValidationError) {
         /* Check body error */
