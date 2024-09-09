@@ -15,7 +15,14 @@ module.exports = {
                       user_id: req.user.id,
                   };
 
-            const saleData = await DB.sale.find(filter).populate({ path: "customerDetail", select: "-user_id -createdAt -updatedAt" }).populate({ path: "productDetail", select: " -user_id -createdAt -updatedAt" }).select("-user_id -createdAt -updatedAt");
+            const saleData = await DB.sale
+                .find(filter)
+                .populate({
+                    path: "customerDetail",
+                    select: "-user_id -createdAt -updatedAt",
+                })
+                .populate({ path: "productDetail", select: " -user_id -createdAt -updatedAt" })
+                .select("-user_id -createdAt -updatedAt");
 
             return response.OK({ res, count: saleData.length, payload: { saleData } });
         } catch (error) {
