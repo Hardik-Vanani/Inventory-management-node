@@ -78,7 +78,7 @@ module.exports = {
         }
     },
 
-    /* Update Sale Bill API */
+    /* Update existed Sale Bill API */
     updateSale: async (req, res) => {
         try {
             const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;
