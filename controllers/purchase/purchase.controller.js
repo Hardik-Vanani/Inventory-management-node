@@ -23,7 +23,7 @@ module.exports = {
         }
     },
 
-    /* Create new Purchase Bill API */
+    /* Create Purchase Bill API */
     createPurchase: async (req, res) => {
         try {
             const { vendorDetail, productDetail, qty, price, date } = req.body;

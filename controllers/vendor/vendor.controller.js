@@ -15,7 +15,7 @@ module.exports = {
         }
     },
 
-    /* Create new vendor API */
+    /* Create vendor API */
     createVendor: async (req, res) => {
         try {
             const createVendor = await DB.vendor.create({ ...req.body, user_id: req.user.id });
