@@ -6,7 +6,7 @@ const {
     CUSTOMER: { APIS, VALIDATOR },
 } = require("../controllers");
 
-/* Get Apis */
+/* Get Api */
 router.get("/:id?", auth, APIS.getCustomer);
 
 /* Post Apis */

@@ -6,7 +6,7 @@ const {
     REPORT: { APIS, VALIDATOR },
 } = require("../controllers");
 
-/* Get Apis */
+/* Get Api */
 router.get("/", auth, APIS.getReports);
 
 /* Delete Apis */
