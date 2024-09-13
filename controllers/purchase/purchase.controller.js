@@ -5,6 +5,7 @@ module.exports = {
     /* Get Purchase Bill API */
     getPurchase: async (req, res) => {
         try {
+            // Chekck if id is present in params
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
 
             const purchaseData = await DB.purchase

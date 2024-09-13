@@ -5,6 +5,7 @@ module.exports = {
     /* Get product API */
     getProduct: async (req, res) => {
         try {
+            // Check if id is present in params
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
             const productData = await DB.product.find(filter).select("-user_id -createdAt -updatedAt");
 
