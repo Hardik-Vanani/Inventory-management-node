@@ -22,7 +22,7 @@ let summary = new Schema(
         qty: Number,
         price: Number,
         amount: Number,
-        transaction_date: {
+        : {
             type: Date,
             default: Date.now,
         },
