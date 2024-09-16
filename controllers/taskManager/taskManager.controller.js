@@ -5,6 +5,7 @@ module.exports = {
     /* Get Task Manager API */
     getTasks: async (req, res) => {
         try {
+            // check if id is present in params
             const filter = req.params.id
                 ? {
                       _id: req.params.id,

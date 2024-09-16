@@ -5,6 +5,7 @@ module.exports = {
     /* Get vendor API */
     getVendor: async (req, res) => {
         try {
+            // checl if id is present in params
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
             const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id");
 
@@ -18,6 +19,7 @@ module.exports = {
     /* Create vendor API */
     createVendor: async (req, res) => {
         try {
+            // create vendor
             const createVendor = await DB.vendor.create({ ...req.body, user_id: req.user.id });
 
             return response.CREATED({ res, payload: { createVendor } });
@@ -30,6 +32,7 @@ module.exports = {
     /* Update vendor API */
     updateVendor: async (req, res) => {
         try {
+            // find and update vendor
             const updatedVendor = await DB.vendor
                 .findOneAndUpdate(
                     {

@@ -7,6 +7,7 @@ module.exports = {
     // Login existing user
     loginUser: async (req, res) => {
         try {
+            // Get username and password from request body
             const { username, password } = req.body;
 
             const user = await DB.user.findOne({ username });
