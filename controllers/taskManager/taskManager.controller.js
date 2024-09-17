@@ -65,6 +65,7 @@ module.exports = {
     /* Delete Task Manager API */
     deleteTask: async (req, res) => {
         try {
+            // find for the task and delete it
             const deleteTask = await DB.taskManager.findOneAndDelete({
                 _id: req.params.id,
                 user_id: req.user.id,

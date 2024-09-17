@@ -13,6 +13,7 @@ module.exports = {
             const user = await DB.user.findOne({ username });
             if (!user) return response.NOT_FOUND({ res });
 
+            // Compare password with hashed password
             const ismatch = await bcryptjs.compare(password, user.password);
             if (!ismatch) return response.UNAUTHORIZED({ res });
 

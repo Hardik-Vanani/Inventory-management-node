@@ -58,6 +58,7 @@ module.exports = {
     /* Delete vendor API */
     deleteVendor: async (req, res) => {
         try {
+            // find and delete vendor
             const deleteVendor = await DB.vendor.findByIdAndDelete({
                 _id: req.params.id,
                 user_id: req.user.id,

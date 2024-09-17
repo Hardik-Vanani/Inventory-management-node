@@ -23,6 +23,7 @@ module.exports = {
     /* Delete report API */
     deleteReport: async (req, res) => {
         try {
+            // find and delete report
             const findSummary = await DB.report.findById(req.params.id);
             if (!findSummary) return response.NOT_FOUND({ res });
 
