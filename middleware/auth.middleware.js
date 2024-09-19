@@ -5,6 +5,7 @@ const auth = (req, res, next) => {
     try {
         const token = req.headers.token;
 
+        // Verify token
         jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
