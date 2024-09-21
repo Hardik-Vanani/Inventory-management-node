@@ -15,9 +15,11 @@ const auth = (req, res, next) => {
                     return response.TOKEN_NEEDED({ res, err });
                 }
             }
+            
             req.user = decoded;
             req.token = token;
-
+            
+            //going on next task
             next();
         });
     } catch (error) {
