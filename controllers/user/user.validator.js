@@ -13,6 +13,35 @@ module.exports = {
         body: Joi.object({
             username: Joi.string().required(),
             password: Joi.string().required(),
+            email: Joi.string()
+                .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+                .required()
+                .messages({
+                    "string.pattern.base": "Please enter a valid email address",
+                    "string.empty": "Email field cannot be empty",
+                    "any.required": "Email is required",
+                }),
+        }),
+    }),
+
+    updateUser: validate({
+        body: Joi.object({
+            password: Joi.string().required(),
+        }),
+        params: Joi.object({
+            id: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .message("Invalid ObjectId")
+                .required(),
+        }),
+    }),
+
+    deleteUser: validate({
+        params: Joi.object({
+            id: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .message("Invalid ObjectId")
+                .required(),
         }),
     }),
 };

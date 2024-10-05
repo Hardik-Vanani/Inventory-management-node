@@ -18,7 +18,7 @@ module.exports = {
             if (!ismatch) return response.UNAUTHORIZED({ res });
 
             const id = user._id,
-            name = user.username;
+                name = user.username;
 
             // Generate JWT token
             const token = jwt.sign({ id, name }, process.env.SECRET_KEY, { expiresIn: "5d" });
@@ -33,18 +33,48 @@ module.exports = {
     // Create new user
     createUser: async (req, res) => {
         try {
-            const { username, password } = req.body;
+            const { email, username, password } = req.body;
+
+            const existingEmail = await DB.user.findOne({ email });
+            if (existingEmail) return response.EXISTED({ res });
 
             const existingUser = await DB.user.findOne({ username });
             if (existingUser) return response.EXISTED({ res });
 
-            // Password hashed by bcryptjs 
+            // Password hashed by bcryptjs
             const hashedPassword = await bcryptjs.hash(password, 10);
-            const newUser = await DB.user.create({ username, password: hashedPassword });
+            const newUser = await DB.user.create({ username, password: hashedPassword, email });
 
             return response.OK({ res, payload: { newUser } });
         } catch (error) {
             console.error("Error creating user: ", error);
+            return response.INTERNAL_SERVER_ERROR({ res });
+        }
+    },
+
+    updateUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { password } = req.body;
+
+            const hashedPassword = await bcryptjs.hash(password, 10);
+            const updatedUser = await DB.user.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
+
+            return response.OK({ res, payload: { updatedUser } });
+        } catch (error) {
+            console.error("Error updating user: ", error);
+            return response.INTERNAL_SERVER_ERROR({ res });
+        }
+    },
+
+    deleteUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const deletedUser = await DB.user.findByIdAndDelete(id);
+
+            return response.OK({ res, payload: { deletedUser } });
+        } catch (error) {
+            console.error("Error deleting user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
