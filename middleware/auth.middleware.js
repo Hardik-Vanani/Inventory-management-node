@@ -3,8 +3,10 @@ const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
     try {
+        // Get token from the header
         const token = req.headers.token;
 
+        // Verify token
         jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
@@ -13,9 +15,11 @@ const auth = (req, res, next) => {
                     return response.TOKEN_NEEDED({ res, err });
                 }
             }
+            
             req.user = decoded;
             req.token = token;
-
+            
+            // Go to next task
             next();
         });
     } catch (error) {
