@@ -12,7 +12,7 @@ router.post("/signin", VALIDATOR.loginUser, APIS.loginUser);
 router.post("/signup", VALIDATOR.createUser, APIS.createUser);
 
 /* Update your password */
-router.put("/:id", VALIDATOR.updateUser, APIS.updateUser);
+router.put("/updatepass/:id", VALIDATOR.updateUser, APIS.updateUser);
 
 /* Delete your account */
 router.delete("/:id", VALIDATOR.deleteUser, APIS.deleteUser);
