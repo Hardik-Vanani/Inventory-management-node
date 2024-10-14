@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
+// Handle error
 const errorHandler = require("./middleware/errorhandler.middleware");
 
 app.use(cors("*"));
@@ -16,6 +17,7 @@ app.use("/api", require("./routers/index"));
 // Handle error which come from the any routes
 app.use(errorHandler);
 
+// Listen to the port
 app.listen(process.env.PORT, () => {
     console.log(`PORT : ${process.env.PORT} 🚀 🖥️  🚀`);
 });
