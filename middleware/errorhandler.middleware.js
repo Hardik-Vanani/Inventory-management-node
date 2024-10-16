@@ -10,6 +10,7 @@ const errorHandler = (err, req, res, next) => {
                 message: detail.message.replace(/\\/g, "").replace(/\"/g, ""),
             }));
 
+            // Return response
             return res.status(err.statusCode).json({
                 status: "false",
                 errors: errorDetails[0],
@@ -23,6 +24,7 @@ const errorHandler = (err, req, res, next) => {
                 message: detail.message,
             }));
 
+            // Return response
             return res.status(err.statusCode).json({
                 status: "false",
                 errors: errorDetails[0],
@@ -36,6 +38,7 @@ const errorHandler = (err, req, res, next) => {
                 message: detail.message,
             }));
 
+            // Return response
             return res.status(err.statusCode).json({
                 status: "false",
                 errors: errorDetails[0],
