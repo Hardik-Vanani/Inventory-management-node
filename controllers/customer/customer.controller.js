@@ -9,6 +9,7 @@ module.exports = {
             const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
             const customerData = await DB.customer.find(filter).select("-user_id -createdAt -updatedAt");
 
+            // return response
             return response.OK({
                 res,
                 count: customerData.length,
@@ -28,6 +29,7 @@ module.exports = {
                 user_id: req.user.id,
             });
 
+            // return response
             return response.OK({ res, payload: { createCustomer } });
         } catch (error) {
             console.error("Error creating customer: ", error);
@@ -47,6 +49,7 @@ module.exports = {
                 { new: true }
             );
 
+            // return response
             return response.OK({ res, payload: { updatedCustomer } });
         } catch (error) {
             console.error("Error updating customer: ", error);
@@ -65,6 +68,7 @@ module.exports = {
 
             const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);
 
+            // return response
             return response.OK({ res, payload: { deleteCustomer } });
         } catch (error) {
             console.error("Error deleting customer: ", error);
