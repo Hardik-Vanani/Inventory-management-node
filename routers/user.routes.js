@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth.middleware");
 
 const {
     USER: { APIS, VALIDATOR },
@@ -12,10 +13,10 @@ router.post("/signin", VALIDATOR.loginUser, APIS.loginUser);
 router.post("/signup", VALIDATOR.createUser, APIS.createUser);
 
 /* Update your password */
-router.put("/updatepass/:id", VALIDATOR.updateUser, APIS.updateUser);
+router.put("/", auth, VALIDATOR.updateUser, APIS.updateUser);
 
 /* Delete your account */
-router.delete("/:id", VALIDATOR.deleteUser, APIS.deleteUser);
+router.delete("/", auth, APIS.deleteUser);
 
 /* forgot password */
 // router.post("/forgot", VALIDATOR.forgotPassword, APIS.forgotPassword);

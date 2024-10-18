@@ -54,23 +54,20 @@ module.exports = {
 
     updateUser: async (req, res) => {
         try {
-            const { id } = req.params;
-    
-            // Validate the ObjectId
-        
             const { password } = req.body;
-    
+            const user_id = req.user.id;
+
             if (!password) {
                 return res.status(400).json({ success: false, message: "Password is required." });
             }
-    
+
             const hashedPassword = await bcryptjs.hash(password, 10);
-            const updatedUser = await DB.user.findByIdAndUpdate(id, { password: hashedPassword }, { new: true });
-    
+            const updatedUser = await DB.user.findByIdAndUpdate(user_id, { password: hashedPassword }, { new: true });
+
             if (!updatedUser) {
                 return res.status(404).json({ success: false, message: "User not found." });
             }
-    
+
             return res.status(200).json({ success: true, payload: { updatedUser } });
         } catch (error) {
             console.error("Error updating user: ", error);
@@ -80,8 +77,8 @@ module.exports = {
 
     deleteUser: async (req, res) => {
         try {
-            const { id } = req.params;
-            const deletedUser = await DB.user.findByIdAndDelete(id);
+            const user_id = req.user.id;
+            const deletedUser = await DB.user.findByIdAndDelete(user_id);
 
             return response.OK({ res, payload: { deletedUser } });
         } catch (error) {

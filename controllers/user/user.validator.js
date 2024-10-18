@@ -28,20 +28,5 @@ module.exports = {
         body: Joi.object({
             password: Joi.string().required(),
         }),
-        params: Joi.object({
-            id: Joi.string()
-                .pattern(/^[0-9a-fA-F]{24}$/)
-                .message("Invalid ObjectId")
-                .required(),
-        }),
-    }),
-
-    deleteUser: validate({
-        params: Joi.object({
-            id: Joi.string()
-                .pattern(/^[0-9a-fA-F]{24}$/)
-                .message("Invalid ObjectId")
-                .required(),
-        }),
     }),
 };
