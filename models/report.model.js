@@ -6,19 +6,23 @@ let summary = new Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "product",
         },
+
         transaction_type: String,
         transactionId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "summary",
         },
+
         vendorID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "vendor",
         },
+
         customerID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "customer",
         },
+
         qty: Number,
         price: Number,
         amount: Number,
@@ -26,6 +30,7 @@ let summary = new Schema(
             type: Date,
             default: Date.now,
         },
+        
         user_id: String,
     },
     {
