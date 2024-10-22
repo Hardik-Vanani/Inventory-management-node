@@ -52,6 +52,7 @@ module.exports = {
         }
     },
 
+    // Update password
     updateUser: async (req, res) => {
         try {
             const { password } = req.body;
@@ -75,6 +76,7 @@ module.exports = {
         }
     },
 
+    // Delete user
     deleteUser: async (req, res) => {
         try {
             const user_id = req.user.id;
