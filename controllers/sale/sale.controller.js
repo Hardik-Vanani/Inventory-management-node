@@ -34,7 +34,7 @@ module.exports = {
     /* Create Sale Bill API */
     createSale: async (req, res) => {
         try {
-            const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;
+            const { customerDetail, productDetail, qty, price, date } = req.body;
 
             const user_id = req.user.id;
             const customerData = await DB.customer.findOne({ _id: customerDetail, user_id });
@@ -81,7 +81,7 @@ module.exports = {
     /* Update existed Sale Bill API */
     updateSale: async (req, res) => {
         try {
-            const { bill_no, customerDetail, productDetail, qty, price, date } = req.body;
+            const { customerDetail, productDetail, qty, price, date } = req.body;
 
             const user_id = req.user.id;
 
