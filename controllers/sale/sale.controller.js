@@ -106,6 +106,7 @@ module.exports = {
                 { new: true }
             );
 
+            // Update sale bill
             const updateSale = await DB.sale.findByIdAndUpdate(
                 { _id: req.params.id, user_id },
                 {

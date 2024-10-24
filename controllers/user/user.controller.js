@@ -62,6 +62,7 @@ module.exports = {
                 return res.status(400).json({ success: false, message: "Password is required." });
             }
 
+            // Hash password
             const hashedPassword = await bcryptjs.hash(password, 10);
             const updatedUser = await DB.user.findByIdAndUpdate(user_id, { password: hashedPassword }, { new: true });
 
