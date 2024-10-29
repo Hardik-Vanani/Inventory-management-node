@@ -55,6 +55,7 @@ module.exports = {
     // Update password
     updateUser: async (req, res) => {
         try {
+            // Get password from request body
             const { password } = req.body;
             const user_id = req.user.id;
 
