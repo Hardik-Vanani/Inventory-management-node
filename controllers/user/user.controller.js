@@ -2,6 +2,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
+const response = require("../../helpers/response.helper");
 
 module.exports = {
     // Login existing user
@@ -60,7 +61,7 @@ module.exports = {
             const user_id = req.user.id;
 
             if (!password) {
-                return res.status(400).json({ success: false, message: "Password is required." });
+                return response.ALL_REQUIRED({ res });
             }
 
             // Hash password
@@ -68,13 +69,13 @@ module.exports = {
             const updatedUser = await DB.user.findByIdAndUpdate(user_id, { password: hashedPassword }, { new: true });
 
             if (!updatedUser) {
-                return res.status(404).json({ success: false, message: "User not found." });
+                return response.NOT_FOUND({ res });
             }
 
             return res.status(200).json({ success: true, payload: { updatedUser } });
         } catch (error) {
             console.error("Error updating user: ", error);
-            return res.status(500).json({ success: false, message: "Internal Server Error." });
+            return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
 
@@ -82,6 +83,8 @@ module.exports = {
     deleteUser: async (req, res) => {
         try {
             const user_id = req.user.id;
+
+            // Find user by id and delete
             const deletedUser = await DB.user.findByIdAndDelete(user_id);
 
             return response.OK({ res, payload: { deletedUser } });
