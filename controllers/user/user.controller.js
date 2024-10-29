@@ -58,6 +58,8 @@ module.exports = {
         try {
             // Get password from request body
             const { password } = req.body;
+
+            // Get user id from authenticated user
             const user_id = req.user.id;
 
             if (!password) {
@@ -82,6 +84,7 @@ module.exports = {
     // Delete user
     deleteUser: async (req, res) => {
         try {
+            // Get user id from authenticated user
             const user_id = req.user.id;
 
             // Find user by id and delete
