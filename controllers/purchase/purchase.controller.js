@@ -74,6 +74,7 @@ module.exports = {
 
             const user_id = req.user.id;
 
+            // Find vendor, product and purchase data
             const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id }).select("-createdAt -updatedAt");
             const productData = await DB.product.findOne({ _id: productDetail, user_id }).select("-createdAt -updatedAt");
             const oldPurchase = await DB.purchase.findById(req.params.id).select("-user_id -createdAt -updatedAt");
