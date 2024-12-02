@@ -44,6 +44,7 @@ module.exports = {
                 { new: true }
             );
 
+            // Calculate amount
             const amount = qty * price;
             const createPurchase = await DB.purchase.create({ ...req.body, amount, user_id });
 
