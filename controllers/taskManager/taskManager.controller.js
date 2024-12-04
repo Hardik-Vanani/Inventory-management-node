@@ -28,6 +28,7 @@ module.exports = {
     /* Create Task manager API */
     createTask: async (req, res) => {
         try {
+            // Create new task
             const taskData = await DB.taskManager.create({
                 ...req.body,
                 user_id: req.user.id,
@@ -42,6 +43,7 @@ module.exports = {
     /* Update Task Manager API */
     updateTask: async (req, res) => {
         try {
+            // find for the task and update it
             const updateTask = await DB.taskManager.findOneAndUpdate(
                 {
                     _id: req.params.id,
