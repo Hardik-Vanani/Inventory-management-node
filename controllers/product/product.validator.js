@@ -1,6 +1,7 @@
 const { validate } = require("express-validation");
 const Joi = require("joi");
 
+// Validator for routes
 module.exports = {
     createProduct: validate({
         body: Joi.object({

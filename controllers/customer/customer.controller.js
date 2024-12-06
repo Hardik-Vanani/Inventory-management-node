@@ -60,6 +60,7 @@ module.exports = {
     /* Delete customer API */
     deleteCustomer: async (req, res) => {
         try {
+            // Find customer
             const findCustomer = await DB.customer.findOne({
                 _id: req.params.id,
                 user_id: req.user.id,
