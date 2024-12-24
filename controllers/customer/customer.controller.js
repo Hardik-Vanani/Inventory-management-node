@@ -1,13 +1,18 @@
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
+const {
+    USER_TYPE: { ADMIN },
+} = require("../../json/message.json");
 
 module.exports = {
     /* Get customer API */
     getCustomer: async (req, res) => {
         try {
-            // Check if id is present in params
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const customerData = await DB.customer.find(filter).select("-user_id -createdAt -updatedAt");
+            // Check role or If id is present in params
+            // const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+
+            const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt");
 
             // return response
             return response.OK({

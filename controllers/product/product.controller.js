@@ -5,8 +5,8 @@ module.exports = {
     /* Get product API */
     getProduct: async (req, res) => {
         try {
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const productData = await DB.product.find(filter).select("-user_id -createdAt -updatedAt");
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            const productData = await DB.product.find(filter).select("-createdAt -updatedAt");
 
             return response.OK({ res, count: productData.length, payload: { productData } });
         } catch (error) {

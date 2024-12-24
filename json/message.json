@@ -20,5 +20,9 @@
         "INTERNAL_SERVER_ERROR": "Internal Server Error",
         "EXISTED": "User already exists",
         "NO_ENOUGH_STOCK": "No enough stock available"
+    },
+    "USER_TYPE": {
+        "ADMIN": "admin",
+        "USER": "user"
     }
 }

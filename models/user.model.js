@@ -1,8 +1,11 @@
 const { Schema, model } = require("mongoose");
+const {
+    USER_TYPE: { USER },
+} = require("../json/message.json");
 
 let user_schema = new Schema(
     {
-        email:{
+        email: {
             type: String,
             require: true,
             unique: true,
@@ -15,6 +18,10 @@ let user_schema = new Schema(
         password: {
             type: String,
             require: true,
+        },
+        role: {
+            type: String,
+            default: USER,
         },
     },
     {

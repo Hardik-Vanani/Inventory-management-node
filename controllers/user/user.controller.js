@@ -2,7 +2,6 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
-const response = require("../../helpers/response.helper");
 
 module.exports = {
     // Login existing user
@@ -19,12 +18,13 @@ module.exports = {
             if (!ismatch) return response.UNAUTHORIZED({ res });
 
             const id = user._id,
-                name = user.username;
+                name = user.username,
+                role = user.role;
 
             // Generate JWT token
-            const token = jwt.sign({ id, name }, process.env.SECRET_KEY, { expiresIn: "5d" });
+            const token = jwt.sign({ id, name, role }, process.env.SECRET_KEY, { expiresIn: "50d" });
 
-            return response.OK({ res, payload: { id, name, token } });
+            return response.OK({ res, payload: { id, name, token, role } });
         } catch (error) {
             console.error("Error logging user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -34,7 +34,7 @@ module.exports = {
     // Create new user
     createUser: async (req, res) => {
         try {
-            const { email, username, password } = req.body;
+            const { email, username, password, role } = req.body;
 
             const existingEmail = await DB.user.findOne({ email });
             if (existingEmail) return response.EXISTED({ res });
@@ -44,7 +44,7 @@ module.exports = {
 
             // Password hashed by bcryptjs
             const hashedPassword = await bcryptjs.hash(password, 10);
-            const newUser = await DB.user.create({ username, password: hashedPassword, email });
+            const newUser = await DB.user.create({ username, password: hashedPassword, email, role });
 
             return response.OK({ res, payload: { newUser } });
         } catch (error) {

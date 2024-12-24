@@ -6,7 +6,8 @@ module.exports = {
     getVendor: async (req, res) => {
         try {
             // checl if id is present in params
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            
             const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id");
 
             return response.OK({ res, count: vendorData.length, payload: { vendorData } });

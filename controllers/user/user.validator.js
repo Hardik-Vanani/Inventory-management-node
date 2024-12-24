@@ -13,6 +13,7 @@ module.exports = {
         body: Joi.object({
             username: Joi.string().required(),
             password: Joi.string().required(),
+            role: Joi.string(),
             email: Joi.string()
                 .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
                 .required()

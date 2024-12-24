@@ -6,7 +6,7 @@ module.exports = {
     getPurchase: async (req, res) => {
         try {
             // Chekck if id is present in params
-            const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
 
             const purchaseData = await DB.purchase
                 .find(filter)

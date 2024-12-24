@@ -5,15 +5,7 @@ module.exports = {
     /* Get Sale Bill API */
     getSale: async (req, res) => {
         try {
-            const filter = req.params.id
-                ? {
-                      _id: req.params.id,
-                      user_id: req.user.id,
-                  }
-                : {
-                      ...req.query,
-                      user_id: req.user.id,
-                  };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
 
             const saleData = await DB.sale
                 .find(filter)
