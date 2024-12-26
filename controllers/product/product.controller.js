@@ -30,10 +30,10 @@ module.exports = {
     /* Update product API */
     updateProduct: async (req, res) => {
         try {
-            const findProduct = await DB.product.find({ _id: req.params.id, user_id: req.user.id });
-            if (!findProduct) return response.NOT_FOUND({ res });
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
 
-            const updateProduct = await DB.product.findOneAndUpdate({ _id: req.params.id, user_id: req.user.id }, req.body, { new: true });
+            const updateProduct = await DB.product.findOneAndUpdate(filter, req.body, { new: true });
+            if (!updateProduct) return response.NOT_FOUND({ res });
 
             return response.OK({ res, payload: { updateProduct } });
         } catch (error) {
@@ -45,10 +45,10 @@ module.exports = {
     /* Delete product API */
     deleteProduct: async (req, res) => {
         try {
-            const findProduct = await DB.product.find({ _id: req.params.id, user_id: req.user.id });
-            if (!findProduct) return response.NOT_FOUND({ res });
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
 
-            const deleteProduct = await DB.product.findByIdAndDelete(req.params.id);
+            const deleteProduct = await DB.product.findByIdAndDelete(filter);
+            if (!deleteProduct) return response.NOT_FOUND({ res });
 
             return response.OK({ res, payload: { deleteProduct } });
         } catch (error) {

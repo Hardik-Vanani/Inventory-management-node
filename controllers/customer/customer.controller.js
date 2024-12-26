@@ -45,14 +45,9 @@ module.exports = {
     /* Update existing customer API */
     updateCustomer: async (req, res) => {
         try {
-            const updatedCustomer = await DB.customer.findOneAndUpdate(
-                {
-                    _id: req.params.id,
-                    user_id: req.user.id,
-                },
-                req.body,
-                { new: true }
-            );
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const updatedCustomer = await DB.customer.findOneAndUpdate(filter, req.body, { new: true });
+            if (!updatedCustomer) return response.NOT_FOUND({ res });
 
             // return response
             return response.OK({ res, payload: { updatedCustomer } });
@@ -65,11 +60,8 @@ module.exports = {
     /* Delete customer API */
     deleteCustomer: async (req, res) => {
         try {
-            // Find customer
-            const findCustomer = await DB.customer.findOne({
-                _id: req.params.id,
-                user_id: req.user.id,
-            });
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const findCustomer = await DB.customer.findOne(filter);
             if (!findCustomer) return response.NOT_FOUND({ res });
 
             const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);

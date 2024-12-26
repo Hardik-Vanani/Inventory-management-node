@@ -6,8 +6,9 @@ module.exports = {
     getReports: async (req, res) => {
         try {
             const user_id = req.user.id;
+            const filter = req.params.id ? { _id: req.params.id, user_id } : { ...req.query, user_id };
             const transactionData = await DB.report
-                .find({ ...req.query, user_id })
+                .find(filter)
                 .populate({ path: "productID", select: "-user_id -createdAt -updatedAt" })
                 .populate({ path: "vendorID", select: "-user_id -createdAt -updatedAt" })
                 .populate({ path: "customerID", select: "-user_id -createdAt -updatedAt" })
@@ -23,14 +24,13 @@ module.exports = {
     /* Delete report API */
     deleteReport: async (req, res) => {
         try {
-            // find and delete report
-            const findSummary = await DB.report.findById(req.params.id);
-            if (!findSummary) return response.NOT_FOUND({ res });
+            // Delete report
 
-            const deleteSummary = await DB.report.findByIdAndDelete({
-                _id: req.params.id,
-                user_id: req.user.id,
-            });
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+
+            const deleteSummary = await DB.report.findByIdAndDelete(filter);
+            if (!deleteSummary) return response.NOT_FOUND({ res });
+            
             return response.OK({ res, payload: { deleteSummary } });
         } catch (error) {
             console.error("Error deleting report: ", error);
