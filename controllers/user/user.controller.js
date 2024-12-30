@@ -85,10 +85,10 @@ module.exports = {
     deleteUser: async (req, res) => {
         try {
             // Get user id from authenticated user
-            const user_id = req.user.id;
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { user_id: req.user.id };
 
             // Find user by id and delete
-            const deletedUser = await DB.user.findByIdAndDelete(user_id);
+            const deletedUser = await DB.user.findByIdAndDelete(filter);
 
             return response.OK({ res, payload: { deletedUser } });
         } catch (error) {

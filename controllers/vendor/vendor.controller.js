@@ -7,7 +7,7 @@ module.exports = {
         try {
             // checl if id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
-            
+
             const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id");
 
             return response.OK({ res, count: vendorData.length, payload: { vendorData } });
@@ -33,17 +33,9 @@ module.exports = {
     /* Update vendor API */
     updateVendor: async (req, res) => {
         try {
-            // find and update vendor
-            const updatedVendor = await DB.vendor
-                .findOneAndUpdate(
-                    {
-                        _id: req.params.id,
-                        user_id: req.user.id,
-                    },
-                    req.body,
-                    { new: true }
-                )
-                .select("-createdAt -updatedAt -user_id ");
+            // Find and update vendor
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const updatedVendor = await DB.vendor.findOneAndUpdate(filter, req.body, { new: true }).select("-createdAt -updatedAt -user_id ");
 
             if (!updatedVendor) {
                 return response.NOT_FOUND({ res });
@@ -59,11 +51,10 @@ module.exports = {
     /* Delete vendor API */
     deleteVendor: async (req, res) => {
         try {
-            // find and delete vendor
-            const deleteVendor = await DB.vendor.findByIdAndDelete({
-                _id: req.params.id,
-                user_id: req.user.id,
-            });
+            // Find and delete vendor
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const deleteVendor = await DB.vendor.findByIdAndDelete(filter);
+            
             if (!deleteVendor) {
                 return response.NOT_FOUND({ res });
             }
