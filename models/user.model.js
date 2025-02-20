@@ -1,14 +1,13 @@
 const { Schema, model } = require("mongoose");
 const {
     USER_TYPE: { USER },
-} = require("../json/message.json");
+} = require("../json/enum.json");
 
 let user_schema = new Schema(
     {
         email: {
             type: String,
             require: true,
-            unique: true,
         },
         username: {
             type: String,
@@ -19,6 +18,12 @@ let user_schema = new Schema(
             type: String,
             require: true,
         },
+        firstName: { type: String, },
+        lastName: { type: String, },
+        city: { type: String, },
+        state: { type: String, },
+        shopName: { type: String, },
+        profileImage: { type: String, },
         role: {
             type: String,
             default: USER,

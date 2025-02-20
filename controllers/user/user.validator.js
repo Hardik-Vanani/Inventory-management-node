@@ -22,12 +22,25 @@ module.exports = {
                     "string.empty": "Email field cannot be empty",
                     "any.required": "Email is required",
                 }),
+            
         }),
     }),
 
-    updateUser: validate({
+    changePassword: validate({
         body: Joi.object({
             password: Joi.string().required(),
         }),
     }),
+
+    updateProfile: validate({
+        body: Joi.object({
+            username: Joi.string(),
+            firstName: Joi.string(),
+            lastName: Joi.string(),
+            city: Joi.string(),
+            state: Joi.string(),
+            shopName: Joi.string(),
+            profileImage: Joi.string()
+        })
+    })
 };

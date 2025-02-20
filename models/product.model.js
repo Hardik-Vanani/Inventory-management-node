@@ -7,7 +7,9 @@ let productSchema = new Schema(
             type: Number,
             default: 0,
         },
-        
+        unit: { type: String },
+        hsnCode: { type: String },
+        itemCode: { type: String },
         user_id: String,
     },
     {

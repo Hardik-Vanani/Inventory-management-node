@@ -1,8 +1,7 @@
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
-const {
-    USER_TYPE: { ADMIN },
-} = require("../../json/message.json");
+const { USER_TYPE: { ADMIN }, } = require("../../json/enum.json");
+const messages = require("../../json/message.json")
 
 module.exports = {
     /* Get customer API */
@@ -17,6 +16,7 @@ module.exports = {
             // return response
             return response.OK({
                 res,
+                message: messages.CUSTOMER_FETCHED_SUCCESSFULLY,
                 count: customerData.length,
                 payload: { customerData },
             });
@@ -35,7 +35,7 @@ module.exports = {
             });
 
             // return response
-            return response.OK({ res, payload: { createCustomer } });
+            return response.OK({ res, message: messages.CUSTOMER_CREATED_SUCCESSFULLY, payload: { createCustomer } });
         } catch (error) {
             console.error("Error creating customer: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -47,10 +47,10 @@ module.exports = {
         try {
             const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
             const updatedCustomer = await DB.customer.findOneAndUpdate(filter, req.body, { new: true });
-            if (!updatedCustomer) return response.NOT_FOUND({ res });
+            if (!updatedCustomer) return response.NOT_FOUND({ res, message: messages.CUSTOMER_NOT_FOUND });
 
             // return response
-            return response.OK({ res, payload: { updatedCustomer } });
+            return response.OK({ res, message: messages.CUSTOMER_UPDATED_SUCCESSFULLY, payload: { updatedCustomer } });
         } catch (error) {
             console.error("Error updating customer: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -62,12 +62,12 @@ module.exports = {
         try {
             const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
             const findCustomer = await DB.customer.findOne(filter);
-            if (!findCustomer) return response.NOT_FOUND({ res });
+            if (!findCustomer) return response.NOT_FOUND({ res, message: messages.CUSTOMER_NOT_FOUND });
 
             const deleteCustomer = await DB.customer.findByIdAndDelete(req.params.id);
 
             // return response
-            return response.OK({ res, payload: { deleteCustomer } });
+            return response.OK({ res, message: messages.CUSTOMER_DELETED_SUCCESSFULLY, payload: { deleteCustomer } });
         } catch (error) {
             console.error("Error deleting customer: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });

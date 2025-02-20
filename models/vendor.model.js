@@ -10,6 +10,8 @@ const schema = new Schema(
             type: String,
             required: true,
         },
+        city: { type: String },
+        state: { type: String },
         user_id: String,
     },
     {

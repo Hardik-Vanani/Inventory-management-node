@@ -1,6 +1,6 @@
 module.exports = {
     taskManager: require("./taskManager.model"),
-        user: require("./user.model"),
+    user: require("./user.model"),
     vendor: require("./vendor.model"),
     customer: require("./customer.model"),
     product: require("./product.model"),

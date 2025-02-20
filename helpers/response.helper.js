@@ -1,70 +1,70 @@
-const { HTTP_CODE, MESSAGE } = require("../json/message.json");
+const { HTTP_CODE, MESSAGE } = require("../json/enum.json");
 
 const response = {
-    OK({ res, count, payload = {} }) {
+    OK({ res, message = MESSAGE.OK, count, payload = {} }) {
         res.status(HTTP_CODE.OK).json({
             success: true,
-            message: MESSAGE.OK,
+            message,
             count,
             payload,
         });
     },
 
-    CREATED({ res, payload = {} }) {
+    CREATED({ res, message = MESSAGE.CREATED, payload = {} }) {
         res.status(HTTP_CODE.CREATED).json({
             success: true,
-            message: MESSAGE.CREATED,
+            message,
             payload,
         });
     },
 
-    ALL_REQUIRED({ res, payload = {} }) {
+    ALL_REQUIRED({ res, payload = {}, message = MESSAGE.ALL_REQUIRED }) {
         res.status(HTTP_CODE.ALL_REQUIRED).json({
             success: false,
-            message: MESSAGE.ALL_REQUIRED,
+            message,
             payload,
         });
     },
 
-    NOT_FOUND({ res }) {
+    NOT_FOUND({ res, message = MESSAGE.NOT_FOUND }) {
         res.status(HTTP_CODE.NOT_FOUND).json({
             success: false,
-            message: MESSAGE.NOT_FOUND,
+            message,
         });
     },
 
-    UNAUTHORIZED({ res }) {
+    UNAUTHORIZED({ res, message = MESSAGE.UNAUTHORIZED }) {
         res.status(HTTP_CODE.UNAUTHORIZED).json({
             success: false,
-            message: MESSAGE.UNAUTHORIZED,
+            message,
         });
     },
 
-    EXISTED({ res }) {
+    EXISTED({ res, message = MESSAGE.EXISTED }) {
         res.status(HTTP_CODE.EXISTED).json({
             success: false,
-            message: MESSAGE.EXISTED,
+            message
         });
     },
 
-    BAD_REQUEST({ res }) {
+    BAD_REQUEST({ res, message = MESSAGE.BAD_REQUEST }) {
         res.status(HTTP_CODE.BAD_REQUEST).json({
             success: false,
-            message: MESSAGE.BAD_REQUEST,
+            message,
         });
     },
 
-    INTERNAL_SERVER_ERROR({ res }) {
+    INTERNAL_SERVER_ERROR({ res, message = MESSAGE.INTERNAL_SERVER_ERROR }) {
         res.status(HTTP_CODE.INTERNAL_SERVER_ERROR).json({
             success: false,
-            message: MESSAGE.INTERNAL_SERVER_ERROR,
+            message
         });
     },
 
-    NO_ENOUGH_STOCK({ res }) {
+    NO_ENOUGH_STOCK({ res, message = MESSAGE.NO_ENOUGH_STOCK }) {
         res.status(HTTP_CODE.NO_ENOUGH_STOCK).json({
             success: false,
-            message: MESSAGE.NO_ENOUGH_STOCK,
+            message,
         });
     },
 
@@ -75,7 +75,7 @@ const response = {
             expiredAt: err.expiredAt,
         });
     },
-    
+
     TOKEN_NEEDED({ res, err }) {
         res.status(HTTP_CODE.UNAUTHORIZED).json({
             success: false,

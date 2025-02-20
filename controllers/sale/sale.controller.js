@@ -1,5 +1,8 @@
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
+const {
+    USER_TYPE: { ADMIN },
+} = require("../../json/enum.json");
 
 module.exports = {
     /* Get Sale Bill API */

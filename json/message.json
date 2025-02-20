@@ -1,28 +1,19 @@
 {
-    "HTTP_CODE": {
-        "ALL_REQUIRED": 499,
-        "OK": 200,
-        "CREATED": 201,
-        "NOT_FOUND": 404,
-        "BAD_REQUEST": 400,
-        "UNAUTHORIZED": 401,
-        "INTERNAL_SERVER_ERROR": 500,
-        "EXISTED": 409,
-        "NO_ENOUGH_STOCK": 410
-    },
-    "MESSAGE": {
-        "ALL_REQUIRED": "All fields are required!",
-        "OK": "Successful",
-        "CREATED": "Created",
-        "NOT_FOUND": "Not Found",
-        "BAD_REQUEST": "Bad request",
-        "UNAUTHORIZED": "Unauthorized",
-        "INTERNAL_SERVER_ERROR": "Internal Server Error",
-        "EXISTED": "User already exists",
-        "NO_ENOUGH_STOCK": "No enough stock available"
-    },
-    "USER_TYPE": {
-        "ADMIN": "admin",
-        "USER": "user"
-    }
+    "EMAIL_ALREADY_EXISTS": "Email Already Exists",
+    "USER_ALREADY_EXISTS": "User Already Exists.",
+    "USERNAME_ALREADY_EXISTS": "Username Already Exists.",
+    "USER_NOT_FOUND": "User not found.",
+    "USER_UPDATED_SUCCESSFULLY": "User updated successfully.",
+    "USER_FETCHED_SUCCESSFULLY": "USer fetched successfully.",
+    "INVALID_PASSWORD": "Invalid password",
+    "VENDOR_NOT_FOUND": "Vendor not found.",
+    "VENDOR_FETCHED_SUCCESSFULLY": "Vendor fetched successfully.",
+    "VENDOR_CREATED_SUCCESSFULLY": "Vendor created successfully.",
+    "VENDOR_UPDATED_SUCCESSFULLY": "Vendor updated successfully.",
+    "VENDOR_DELETED_SUCCESSFULLY": "Vendor deleted successfully.",
+    "CUSTOMER_NOT_FOUND": "Customer not found.",
+    "CUSTOMER_FETCHED_SUCCESSFULLY": "Customer fetched successfully.",
+    "CUSTOMER_CREATED_SUCCESSFULLY": "Customer created successfully.",
+    "CUSTOMER_UPDATED_SUCCESSFULLY": "Customer updated successfully.",
+    "CUSTOMER_DELETED_SUCCESSFULLY": "Customer deleted successfully."
 }

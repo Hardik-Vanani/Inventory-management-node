@@ -8,6 +8,7 @@ module.exports = {
             mobileNo: Joi.string()
                 .pattern(/^[0-9]{10}$/)
                 .required(),
+                
         }),
     }),
 

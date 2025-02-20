@@ -26,7 +26,7 @@ let purchase_product = new Schema(
             type: Number,
             require: true,
         },
-        date: {
+        billDate: {
             type: Date,
             default: Date.now,
         },
