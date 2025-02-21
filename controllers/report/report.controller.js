@@ -5,14 +5,14 @@ module.exports = {
     /* Get report API */
     getReports: async (req, res) => {
         try {
-            const user_id = req.user.id;
-            const filter = req.params.id ? { _id: req.params.id, user_id } : { ...req.query, user_id };
+            const userId = req.user.id;
+            const filter = req.params.id ? { _id: req.params.id, userId } : { ...req.query, userId };
             const transactionData = await DB.report
                 .find(filter)
-                .populate({ path: "productID", select: "-user_id -createdAt -updatedAt" })
-                .populate({ path: "vendorID", select: "-user_id -createdAt -updatedAt" })
-                .populate({ path: "customerID", select: "-user_id -createdAt -updatedAt" })
-                .select("-user_id -createdAt -updatedAt");
+                .populate({ path: "productID", select: "-userId -createdAt -updatedAt" })
+                .populate({ path: "vendorID", select: "-userId -createdAt -updatedAt" })
+                .populate({ path: "customerID", select: "-userId -createdAt -updatedAt" })
+                .select("-userId -createdAt -updatedAt");
 
             return response.OK({ res, count: transactionData.length, payload: { transactionData } });
         } catch {
@@ -26,7 +26,7 @@ module.exports = {
         try {
             // Delete report
 
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
 
             const deleteSummary = await DB.report.findByIdAndDelete(filter);
             if (!deleteSummary) return response.NOT_FOUND({ res });

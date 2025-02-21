@@ -2,15 +2,15 @@ const { Schema, model, default: mongoose } = require("mongoose");
 
 let purchase_product = new Schema(
     {
-        bill_no: {
+        billNo: {
             type: String,
             require: true,
         },
-        vendorDetail: {
+        vendorId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "vendor",
         },
-        productDetail: {
+        productId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "product",
         },
@@ -30,8 +30,21 @@ let purchase_product = new Schema(
             type: Date,
             default: Date.now,
         },
-        user_id: String,
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
+    /* 
+    {
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        vendorId: { type: Schema.Types.ObjectId, ref: "vendor" },
+        billNo: { type: String, required: true, },
+        billDate: { type: Date.now },
+        GSTPer: { type: Number, default: 0 },
+        GSTAmount: { type: Number, default: 0 },
+        totalAmount: { type: Number, default: 0 },
+        isGSTBill: { type: Boolean, default: true }
+        remarks: { type: String, default: "" },
+    } 
+    */
     {
         versionKey: false,
         timestamps: true,

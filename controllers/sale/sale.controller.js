@@ -8,16 +8,16 @@ module.exports = {
     /* Get Sale Bill API */
     getSale: async (req, res) => {
         try {
-            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
             const saleData = await DB.sale
                 .find(filter)
                 .populate({
-                    path: "customerDetail",
-                    select: "-user_id -createdAt -updatedAt",
+                    path: "customerId",
+                    select: "-userId -createdAt -updatedAt",
                 })
-                .populate({ path: "productDetail", select: " -user_id -createdAt -updatedAt" })
-                .select("-user_id -createdAt -updatedAt");
+                .populate({ path: "productId", select: " -userId -createdAt -updatedAt" })
+                .select("-userId -createdAt -updatedAt");
 
             return response.OK({ res, count: saleData.length, payload: { saleData } });
         } catch (error) {
@@ -29,11 +29,11 @@ module.exports = {
     /* Create Sale Bill API */
     createSale: async (req, res) => {
         try {
-            const { customerDetail, productDetail, qty, price, date } = req.body;
+            const { customerId, productId, qty, price, date } = req.body;
 
-            const user_id = req.user.id;
-            const customerData = await DB.customer.findOne({ _id: customerDetail, user_id });
-            const productData = await DB.product.findOne({ _id: productDetail, user_id });
+            const userId = req.user.id;
+            const customerData = await DB.customer.findOne({ _id: customerId, userId });
+            const productData = await DB.product.findOne({ _id: productId, userId });
 
             if (!customerData || !productData) return response.NOT_FOUND({ res });
 
@@ -43,7 +43,7 @@ module.exports = {
 
             // Update stock in product
             await DB.product.findByIdAndUpdate(
-                productDetail,
+                productId,
                 {
                     $inc: { stock: -qty },
                 },
@@ -51,19 +51,19 @@ module.exports = {
             );
 
             const amount = qty * price;
-            const saleData = await DB.sale.create({ ...req.body, amount, user_id });
+            const saleData = await DB.sale.create({ ...req.body, amount, userId });
 
             // Create trasaction report
             await DB.report.create({
-                productID: productDetail,
+                productID: productId,
                 transaction_type: "Sale",
                 transactionId: saleData._id,
-                customerID: customerDetail,
+                customerID: customerId,
                 qty,
                 price,
                 amount,
                 transaction_date: date,
-                user_id,
+                userId,
             });
 
             return response.CREATED({ res, payload: { saleData } });
@@ -76,12 +76,12 @@ module.exports = {
     /* Update existed Sale Bill API */
     updateSale: async (req, res) => {
         try {
-            const { customerDetail, productDetail, qty, price, date } = req.body;
+            const { customerId, productId, qty, price, date } = req.body;
 
-            const user_id = req.user.id;
+            const userId = req.user.id;
 
-            const customerData = await DB.customer.findOne({ _id: customerDetail, user_id });
-            const productData = await DB.product.findOne({ _id: productDetail, user_id });
+            const customerData = await DB.customer.findOne({ _id: customerId, userId });
+            const productData = await DB.product.findOne({ _id: productId, userId });
             if (!productData || !customerData) return response.NOT_FOUND({ res });
 
             if (qty > productData.stock) {
@@ -94,7 +94,7 @@ module.exports = {
             // Update stock in product
             const qtyDifference = qty - oldSale.qty;
             await DB.product.findByIdAndUpdate(
-                productDetail,
+                productId,
                 {
                     $inc: { stock: -qtyDifference },
                 },
@@ -103,7 +103,7 @@ module.exports = {
 
             // Update sale bill
             const updateSale = await DB.sale.findByIdAndUpdate(
-                { _id: req.params.id, user_id },
+                { _id: req.params.id, userId },
                 {
                     ...req.body,
                     amount: qty * price,
@@ -115,8 +115,8 @@ module.exports = {
             await DB.report.findOneAndUpdate(
                 { transactionId: req.params.id },
                 {
-                    customerID: customerDetail,
-                    productID: productDetail,
+                    customerID: customerId,
+                    productID: productId,
                     qty,
                     price,
                     amount: qty * price,
@@ -140,7 +140,7 @@ module.exports = {
 
             // Update stock in product
             await DB.product.findByIdAndUpdate(
-                findSale.productDetail,
+                findSale.productId,
                 {
                     $inc: { stock: findSale.qty },
                 },
@@ -149,7 +149,7 @@ module.exports = {
 
             const deleteSale = await DB.sale.findByIdAndDelete({
                 _id: req.params.id,
-                user_id: req.user.id,
+                userId: req.user.id,
             });
             return response.OK({ res, payload: { deleteSale } });
         } catch (error) {

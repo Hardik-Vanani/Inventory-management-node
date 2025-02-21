@@ -6,6 +6,7 @@
     "USER_UPDATED_SUCCESSFULLY": "User updated successfully.",
     "USER_FETCHED_SUCCESSFULLY": "USer fetched successfully.",
     "INVALID_PASSWORD": "Invalid password",
+    "PASSWORD_UPDATED_SUCCESSFULLY": "Password updated successfully.",
     "VENDOR_NOT_FOUND": "Vendor not found.",
     "VENDOR_FETCHED_SUCCESSFULLY": "Vendor fetched successfully.",
     "VENDOR_CREATED_SUCCESSFULLY": "Vendor created successfully.",
@@ -15,5 +16,10 @@
     "CUSTOMER_FETCHED_SUCCESSFULLY": "Customer fetched successfully.",
     "CUSTOMER_CREATED_SUCCESSFULLY": "Customer created successfully.",
     "CUSTOMER_UPDATED_SUCCESSFULLY": "Customer updated successfully.",
-    "CUSTOMER_DELETED_SUCCESSFULLY": "Customer deleted successfully."
+    "CUSTOMER_DELETED_SUCCESSFULLY": "Customer deleted successfully.",
+    "PRODUCT_NOT_FOUND": "Product not found.",
+    "PRODUCT_FETCHED_SUCCESSFULLY": "Product fetched successfully.",
+    "PRODUCT_CREATED_SUCCESSFULLY": "Product created successfully.",
+    "PRODUCT_UPDATED_SUCCESSFULLY": "Product updated successfully.",
+    "PRODUCT_DELETED_SUCCESSFULLY": "Product deleted successfully."
 }

@@ -30,8 +30,8 @@ let summary = new Schema(
             type: Date,
             default: Date.now,
         },
-        
-        user_id: String,
+
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
         versionKey: false,

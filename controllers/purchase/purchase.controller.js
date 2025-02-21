@@ -1,24 +1,22 @@
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
-const {
-    USER_TYPE: { ADMIN },
-} = require("../../json/enum.json");
+const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
 
 module.exports = {
     /* Get Purchase Bill API */
     getPurchase: async (req, res) => {
         try {
             // Chekck if id is present in params
-            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
             const purchaseData = await DB.purchase
                 .find(filter)
                 .populate({
-                    path: "vendorDetail",
-                    select: "-user_id -createdAt -updatedAt",
+                    path: "vendorId",
+                    select: "-userId -createdAt -updatedAt",
                 })
-                .populate({ path: "productDetail", select: "-user_id -createdAt -updatedAt" })
-                .select("-user_id -createdAt -updatedAt");
+                .populate({ path: "productId", select: "-userId -createdAt -updatedAt" })
+                .select("-userId -createdAt -updatedAt");
 
             return response.OK({ res, count: purchaseData.length, payload: { purchaseData } });
         } catch (error) {
@@ -30,17 +28,17 @@ module.exports = {
     /* Create Purchase Bill API */
     createPurchase: async (req, res) => {
         try {
-            const { vendorDetail, productDetail, qty, price, date } = req.body;
+            const { vendorId, productId, qty, price, date } = req.body;
 
-            const user_id = req.user.id;
-            const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id });
-            const productData = await DB.product.findOne({ _id: productDetail, user_id });
+            const userId = req.user.id;
+            const vendorData = await DB.vendor.findOne({ _id: vendorId, userId });
+            const productData = await DB.product.findOne({ _id: productId, userId });
 
             if (!vendorData || !productData) return response.NOT_FOUND({ res });
 
             // Update stock in product
             await DB.product.findByIdAndUpdate(
-                productDetail,
+                productId,
                 {
                     $inc: { stock: qty },
                 },
@@ -49,19 +47,19 @@ module.exports = {
 
             // Calculate amount
             const amount = qty * price;
-            const createPurchase = await DB.purchase.create({ ...req.body, amount, user_id });
+            const createPurchase = await DB.purchase.create({ ...req.body, amount, userId });
 
             // Create transaction report
             await DB.report.create({
-                productID: productDetail,
+                productID: productId,
                 transaction_type: "Purchase",
                 transactionId: createPurchase._id,
-                vendorID: vendorDetail,
+                vendorID: vendorId,
                 qty,
                 price,
                 amount,
                 transaction_date: date,
-                user_id,
+                userId,
             });
 
             return response.CREATED({ res, payload: { createPurchase } });
@@ -74,21 +72,21 @@ module.exports = {
     /* Update Purchase Bill API */
     updatePurchase: async (req, res) => {
         try {
-            const { vendorDetail, productDetail, qty, price, date } = req.body;
+            const { vendorId, productId, qty, price, date } = req.body;
 
-            const user_id = req.user.id;
+            const userId = req.user.id;
 
             // Find vendor, product and purchase data
-            const vendorData = await DB.vendor.findOne({ _id: vendorDetail, user_id }).select("-createdAt -updatedAt");
-            const productData = await DB.product.findOne({ _id: productDetail, user_id }).select("-createdAt -updatedAt");
-            const oldPurchase = await DB.purchase.findById(req.params.id).select("-user_id -createdAt -updatedAt");
+            const vendorData = await DB.vendor.findOne({ _id: vendorId, userId }).select("-createdAt -updatedAt");
+            const productData = await DB.product.findOne({ _id: productId, userId }).select("-createdAt -updatedAt");
+            const oldPurchase = await DB.purchase.findById(req.params.id).select("-userId -createdAt -updatedAt");
 
             if (!vendorData || !productData || !oldPurchase) return response.NOT_FOUND({ res });
 
             // Update stock in product
             let qtyDifference = qty - oldPurchase.qty;
             await DB.product.findByIdAndUpdate(
-                productDetail,
+                productId,
                 {
                     $inc: { stock: qtyDifference },
                 },
@@ -99,7 +97,7 @@ module.exports = {
             const updateProduct = await DB.purchase.findByIdAndUpdate(
                 {
                     _id: req.params.id,
-                    user_id,
+                    userId,
                 },
                 {
                     ...req.body,
@@ -112,8 +110,8 @@ module.exports = {
             await DB.report.findOneAndUpdate(
                 { transactionId: req.params.id },
                 {
-                    vendorID: vendorDetail,
-                    productID: productDetail,
+                    vendorID: vendorId,
+                    productID: productId,
                     qty,
                     price,
                     amount: qty * price,
@@ -135,7 +133,7 @@ module.exports = {
             const findPurchase = await DB.purchase.findById(req.params.id);
             if (!findPurchase) return response.NOT_FOUND({ res });
 
-            const productData = await DB.product.findById(findPurchase.productDetail);
+            const productData = await DB.product.findById(findPurchase.productId);
 
             // Check stock for purchase
             if (productData.stock <= findPurchase.qty) {
@@ -144,11 +142,11 @@ module.exports = {
 
             // Update stock in product
             const newStock = productData.stock - findPurchase.qty;
-            await DB.product.findByIdAndUpdate(findPurchase.productDetail, { stock: newStock }, { new: true });
+            await DB.product.findByIdAndUpdate(findPurchase.productId, { stock: newStock }, { new: true });
 
             const deletePurchase = await DB.purchase.findByIdAndDelete({
                 _id: req.params.id,
-                user_id: req.user.id,
+                userId: req.user.id,
             });
             return response.OK({ res, payload: { deletePurchase } });
         } catch (error) {

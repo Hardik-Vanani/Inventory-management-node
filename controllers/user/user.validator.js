@@ -22,13 +22,14 @@ module.exports = {
                     "string.empty": "Email field cannot be empty",
                     "any.required": "Email is required",
                 }),
-            
+
         }),
     }),
 
     changePassword: validate({
         body: Joi.object({
             password: Joi.string().required(),
+            newPassword: Joi.string().required(),
         }),
     }),
 
@@ -39,8 +40,7 @@ module.exports = {
             lastName: Joi.string(),
             city: Joi.string(),
             state: Joi.string(),
-            shopName: Joi.string(),
-            profileImage: Joi.string()
+            shopName: Joi.string()
         })
     })
 };

@@ -9,8 +9,7 @@ let productSchema = new Schema(
         },
         unit: { type: String },
         hsnCode: { type: String },
-        itemCode: { type: String },
-        user_id: String,
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
         versionKey: false,

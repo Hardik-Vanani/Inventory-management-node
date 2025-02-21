@@ -1,4 +1,3 @@
-const { string } = require("joi");
 const { Schema, model } = require("mongoose");
 
 const taskManagerSchema = new Schema(
@@ -15,7 +14,7 @@ const taskManagerSchema = new Schema(
             type: String,
             default: "Pending",
         },
-        user_id: String,
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
         versionKey: false,

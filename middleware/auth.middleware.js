@@ -18,6 +18,7 @@ const auth = (req, res, next) => {
             
             req.user = decoded;
             req.token = token;
+
             // Go to on next task
             next();
         });

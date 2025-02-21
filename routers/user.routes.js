@@ -16,11 +16,11 @@ router.post("/signup", VALIDATOR.createUser, APIS.createUser);
 
 
 /* Put APIs */
-router.put("/changePassword", auth, VALIDATOR.changePassword, APIS.changePassword);
+router.put("/change-password", auth, VALIDATOR.changePassword, APIS.changePassword);
 
-router.put("/updateProfile", auth, upload.single("profileImage"), VALIDATOR.updateProfile, APIS.updateProfile);
+router.put("/update-profile", auth, upload.single("profileImage"), VALIDATOR.updateProfile, APIS.updateProfile);
 
-// router.put("/forgot", VALIDATOR.forgotPassword, APIS.forgotPassword);
+// router.put("/forgot-password", VALIDATOR.forgotPassword, APIS.forgotPassword);
 
 
 /* Delete APIs */

@@ -3,16 +3,20 @@ const jwt = require("jsonwebtoken");
 const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 const messages = require('../../json/message.json')
+const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
+
 
 module.exports = {
     // Get user details
     getUser: async (req, res) => {
         try {
-
+            console.log('req.user.id::: ', req.user.role);
             let filter = req.user.role === ADMIN
                 ? (req.params.id ? { _id: req.params.id, ...req.query } : { ...req.query })
                 : { _id: req.user.id };
 
+
+            console.log('filter::: ', filter);
             const userDetails = await DB.user.find(filter)
             if (!userDetails) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
 
@@ -75,21 +79,19 @@ module.exports = {
     changePassword: async (req, res) => {
         try {
             // Get password from request body
-            const { password } = req.body;
+            const { password, newPassword } = req.body;
 
             // Get user id from authenticated user
-            const user_id = req.user.id;
+            const userId = req.user.id;
 
-            const user = await DB.user.findOne({ _id: user_id });
+            const user = await DB.user.findOne({ _id: userId });
             if (!user) return response.NOT_FOUND({ res });
 
             if (!(await bcryptjs.compare(password, user.password))) return response.UNAUTHORIZED({ res, message: messages.INVALID_PASSWORD });
 
-            if (!updatedUser) {
-                return response.NOT_FOUND({ res });
-            }
-
-            return response.OK({ res, payload: { updatedUser } });
+            const hashedPassword = await bcryptjs.hash(newPassword, 10);
+            await DB.user.findByIdAndUpdate(userId, { password: hashedPassword }, { new: true })
+            return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY });
         } catch (error) {
             console.error("Error updating user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -99,21 +101,20 @@ module.exports = {
     // Update User Profile
     updateProfile: async (req, res) => {
         try {
-            const user_id = req.user.id;
-            if (!(await DB.user.findOne({ _id: user_id }))) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+            const userId = req.user.id;
+            if (!(await DB.user.findOne({ _id: userId }))) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
 
             if (req.body.username) {
-                const userExistance = await DB.user.findOne({ username: req.body.username, _id: { $ne: user_id } });
+                const userExistance = await DB.user.findOne({ username: req.body.username, _id: { $ne: userId } });
                 if (userExistance) return response.EXISTED({ res, message: messages.USERNAME_ALREADY_EXISTS });
 
             }
 
-            let updateData = { ...req.body };
             if (req.file) {
-                updateData.profileImage = `/uploads/${req.file.filename}`; // Save file path
+                req.body.profileImage = `/uploads/${req.file.filename}`; // Save file path
             }
 
-            await DB.user.findByIdAndUpdate(user_id, req.body, { new: true })
+            await DB.user.findByIdAndUpdate(userId, req.body, { new: true })
 
             return response.OK({ res, message: messages.USER_UPDATED_SUCCESSFULLY })
         } catch (error) {
@@ -125,17 +126,17 @@ module.exports = {
     deleteUser: async (req, res) => {
         try {
             // Get user id from authenticated user
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { userId: req.user.id };
 
             // Find user by id and delete & dekete all record of that User
             const deletedUser = await DB.user.findByIdAndDelete(filter);
-            await DB.purchase.findByIdAndDelete({ user_id: req.user.id })
-            await DB.sale.findByIdAndDelete({ user_id: req.user.id })
-            await DB.vendor.findByIdAndDelete({ user_id: req.user.id })
-            await DB.customer.findByIdAndDelete({ user_id: req.user.id })
-            await DB.product.findByIdAndDelete({ user_id: req.user.id })
-            await DB.report.findByIdAndDelete({ user_id: req.user.id })
-            await DB.taskManager.findByIdAndDelete({ user_id: req.user.id })
+            await DB.purchase.findByIdAndDelete({ userId: req.user.id })
+            await DB.sale.findByIdAndDelete({ userId: req.user.id })
+            await DB.vendor.findByIdAndDelete({ userId: req.user.id })
+            await DB.customer.findByIdAndDelete({ userId: req.user.id })
+            await DB.product.findByIdAndDelete({ userId: req.user.id })
+            await DB.report.findByIdAndDelete({ userId: req.user.id })
+            await DB.taskManager.findByIdAndDelete({ userId: req.user.id })
 
             return response.OK({ res, payload: { deletedUser } });
         } catch (error) {

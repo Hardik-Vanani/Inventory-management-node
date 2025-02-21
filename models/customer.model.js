@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const { type } = require("os");
 
 const schema = new Schema(
     {
@@ -10,7 +9,7 @@ const schema = new Schema(
         },
         city: { type: String },
         state: { type: String },
-        user_id: String,
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
         versionKey: false,

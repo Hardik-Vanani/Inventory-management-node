@@ -8,8 +8,8 @@ module.exports = {
     getCustomer: async (req, res) => {
         try {
             // Check role or If id is present in params
-            // const filter = req.params.id ? { _id: req.params.id, user_id: req.user.id } : { ...req.query, user_id: req.user.id };
-            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            // const filter = req.params.id ? { _id: req.params.id, userId: req.user.id } : { ...req.query, userId: req.user.id };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
             const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt");
 
@@ -31,7 +31,7 @@ module.exports = {
         try {
             const createCustomer = await DB.customer.create({
                 ...req.body,
-                user_id: req.user.id,
+                userId: req.user.id,
             });
 
             // return response
@@ -45,7 +45,7 @@ module.exports = {
     /* Update existing customer API */
     updateCustomer: async (req, res) => {
         try {
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
             const updatedCustomer = await DB.customer.findOneAndUpdate(filter, req.body, { new: true });
             if (!updatedCustomer) return response.NOT_FOUND({ res, message: messages.CUSTOMER_NOT_FOUND });
 
@@ -60,7 +60,7 @@ module.exports = {
     /* Delete customer API */
     deleteCustomer: async (req, res) => {
         try {
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
             const findCustomer = await DB.customer.findOne(filter);
             if (!findCustomer) return response.NOT_FOUND({ res, message: messages.CUSTOMER_NOT_FOUND });
 

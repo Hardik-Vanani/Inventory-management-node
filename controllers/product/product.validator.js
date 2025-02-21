@@ -6,6 +6,8 @@ module.exports = {
     createProduct: validate({
         body: Joi.object({
             productName: Joi.string().required(),
+            unit: Joi.string(),
+            hsnCode: Joi.string(),
         }),
     }),
 
@@ -13,7 +15,8 @@ module.exports = {
         body: Joi.object({
             productName: Joi.string().required(),
             stock: Joi.number().required(),
-            _id: Joi.string().optional(),
+            unit: Joi.string(),
+            hsnCode: Joi.string(),
         }),
 
         params: Joi.object({

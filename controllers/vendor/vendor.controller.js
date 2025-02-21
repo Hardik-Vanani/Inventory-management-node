@@ -8,9 +8,9 @@ module.exports = {
     getVendor: async (req, res) => {
         try {
             // check if id is present in params
-            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -user_id");
+            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -userId");
 
             return response.OK({ res, message: messages.VENDOR_FETCHED_SUCCESSFULLY, count: vendorData.length, payload: { vendorData } });
         } catch (error) {
@@ -23,7 +23,7 @@ module.exports = {
     createVendor: async (req, res) => {
         try {
             // create vendor
-            const createVendor = await DB.vendor.create({ ...req.body, user_id: req.user.id });
+            const createVendor = await DB.vendor.create({ ...req.body, userId: req.user.id });
 
             return response.CREATED({ res, message: messages.VENDOR_CREATED_SUCCESSFULLY, payload: { createVendor } });
         } catch (error) {
@@ -36,8 +36,8 @@ module.exports = {
     updateVendor: async (req, res) => {
         try {
             // Find and update vendor
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
-            const updatedVendor = await DB.vendor.findOneAndUpdate(filter, req.body, { new: true }).select("-createdAt -updatedAt -user_id ");
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
+            const updatedVendor = await DB.vendor.findOneAndUpdate(filter, req.body, { new: true }).select("-createdAt -updatedAt -userId ");
 
             if (!updatedVendor) {
                 return response.NOT_FOUND({ res, message: messages.VENDOR_NOT_FOUND });
@@ -54,7 +54,7 @@ module.exports = {
     deleteVendor: async (req, res) => {
         try {
             // Find and delete vendor
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
             const deleteVendor = await DB.vendor.findByIdAndDelete(filter);
 
             if (!deleteVendor) {

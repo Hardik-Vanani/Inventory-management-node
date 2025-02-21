@@ -9,9 +9,9 @@ module.exports = {
     getTasks: async (req, res) => {
         try {
             // check if id is present in params
-            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, user_id: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { user_id: req.user.id, ...req.query };
+            const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            const taskData = await DB.taskManager.find(filter).select("-user_id");
+            const taskData = await DB.taskManager.find(filter).select("-userId");
 
             return response.OK({ res, count: taskData.length, payload: { taskData } });
         } catch (error) {
@@ -26,7 +26,7 @@ module.exports = {
             // Create new task
             const taskData = await DB.taskManager.create({
                 ...req.body,
-                user_id: req.user.id,
+                userId: req.user.id,
             });
             return response.CREATED({ res, payload: { taskData } });
         } catch (error) {
@@ -39,7 +39,7 @@ module.exports = {
     updateTask: async (req, res) => {
         try {
             // Find for the task and update it
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
             const updateTask = await DB.taskManager.findOneAndUpdate(filter, req.body, { new: true });
 
             if (!updateTask) {
@@ -57,7 +57,7 @@ module.exports = {
     deleteTask: async (req, res) => {
         try {
             // Find for the task and delete it
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, user_id: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.params.id, userId: req.user.id };
             const deleteTask = await DB.taskManager.findOneAndDelete(filter);
 
             if (!deleteTask) {

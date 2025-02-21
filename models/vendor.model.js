@@ -12,7 +12,7 @@ const schema = new Schema(
         },
         city: { type: String },
         state: { type: String },
-        user_id: String,
+        userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
         versionKey: false,
