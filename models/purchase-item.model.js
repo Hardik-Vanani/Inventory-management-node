@@ -4,13 +4,13 @@ let purchaseItemSchema = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: "user" },
         productId: { type: Schema.Types.ObjectId, ref: "product" },
-        purchaseBillId: { type: Schema.Types.ObjectId, ref: "purchase_product" },
+        purchaseBillId: { type: Schema.Types.ObjectId, ref: "purchaseBill" },
         vendorId: { type: Schema.Types.ObjectId, ref: "vendor" },
-        hsnCode: { type: String, default: "" },
         qty: { type: Number, required: true },
-        GSTPercentage: { type: Number, default: 0 },
         unit: { type: String, required: true },
         rate: { type: Number, required: true },
+        GSTPercentage: { type: Number, default: 0 },
+        GSTAmount: { type: Number, default: 0 },
         totalAmount: { type: Number, default: 0 }, // rate * qty
     },
     {
@@ -18,4 +18,4 @@ let purchaseItemSchema = new Schema(
         timestamps: true,
     }
 )
-module.exports = model("saleItem", purchaseItemSchema, "saleItem")
+module.exports = model("purchaseItem", purchaseItemSchema, "purchaseItem")

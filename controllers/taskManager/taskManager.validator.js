@@ -15,7 +15,6 @@ module.exports = {
             taskName: Joi.string().required(),
             status: Joi.string().required(),
             date: Joi.string().optional(),
-            _id: Joi.string().optional(),
         }),
 
         params: Joi.object({

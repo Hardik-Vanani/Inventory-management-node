@@ -37,7 +37,7 @@ let sale_schema = new Schema(
         userId: { type: Schema.Types.ObjectId, ref: "user" },
         customerId: { type: Schema.Types.ObjectId, ref: "customer" },
         billNo: { type: String, required: true, },
-        billDate: { type: Date.now },
+        billDate: { type: Date },
         GSTPer: { type: Number, default: 0 },
         GSTAmount: { type: Number, default: 0 },
         totalAmount: { type: Number, default: 0 },
@@ -51,4 +51,4 @@ let sale_schema = new Schema(
     }
 );
 
-module.exports = model("sale_product", sale_schema, "sale_product");
+module.exports = model("saleBill", sale_schema, "saleBill");

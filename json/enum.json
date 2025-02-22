@@ -24,5 +24,11 @@
     "USER_TYPE": {
         "ADMIN": "admin",
         "USER": "user"
+    },
+    "TRASANCTION_TYPE": {
+        "PURCHASE": "purchase",
+        "SALE": "sale",
+        "EXPENSE": "expense",
+        "INCOME": "income"
     }
 }

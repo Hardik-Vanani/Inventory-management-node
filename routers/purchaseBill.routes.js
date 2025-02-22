@@ -10,10 +10,10 @@ const {
 router.get("/:id?", auth, APIS.getPurchase);
 
 /* Post Apis */
-router.post("/", auth, VALIDATOR.createPurchase, APIS.createPurchase);
+router.post("/", auth, VALIDATOR.create, APIS.createPurchase);
 
 /* Put Apis */
-router.put("/:id", auth, VALIDATOR.updatePurchase, APIS.updatePurchase);
+router.put("/:id", auth, VALIDATOR.update, APIS.updatePurchase);
 
 /* Delete Apis */
 router.delete("/:id", auth, VALIDATOR.deletePurchase, APIS.deletePurchase);

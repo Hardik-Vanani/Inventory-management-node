@@ -10,7 +10,7 @@ module.exports = {
             const transactionData = await DB.report
                 .find(filter)
                 .populate({ path: "productID", select: "-userId -createdAt -updatedAt" })
-                .populate({ path: "vendorID", select: "-userId -createdAt -updatedAt" })
+                .populate({ path: "vendorId", select: "-userId -createdAt -updatedAt" })
                 .populate({ path: "customerID", select: "-userId -createdAt -updatedAt" })
                 .select("-userId -createdAt -updatedAt");
 

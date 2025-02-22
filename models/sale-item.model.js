@@ -4,7 +4,7 @@ let saleItemSchema = new Schema(
     {
         userId: { type: Schema.Types.ObjectId, ref: "user" },
         productId: { type: Schema.Types.ObjectId, ref: "product" },
-        saleBillId: { type: Schema.Types.ObjectId, ref: "sale_product" },
+        saleBillId: { type: Schema.Types.ObjectId, ref: "saleBill" },
         customerId: { type: Schema.Types.ObjectId, ref: "customer" },
         hsnCode: { type: String, default: "" },
         qty: { type: Number, required: true },
@@ -18,4 +18,4 @@ let saleItemSchema = new Schema(
         timestamps: true,
     }
 )
-module.exports = model("purchaseItem", saleItemSchema, "purchaseItem")
+module.exports = model("saleItem", saleItemSchema, "saleItem")

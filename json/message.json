@@ -21,5 +21,10 @@
     "PRODUCT_FETCHED_SUCCESSFULLY": "Product fetched successfully.",
     "PRODUCT_CREATED_SUCCESSFULLY": "Product created successfully.",
     "PRODUCT_UPDATED_SUCCESSFULLY": "Product updated successfully.",
-    "PRODUCT_DELETED_SUCCESSFULLY": "Product deleted successfully."
+    "PRODUCT_DELETED_SUCCESSFULLY": "Product deleted successfully.",
+    "PURCHASE_NOT_FOUND": "Purchase Bill not found.",
+    "PURCHASE_FETCHED_SUCCESSFULLY": "Purchase Bill fetched successfully.",
+    "PURCHASE_CREATED_SUCCESSFULLY": "Purchase Bill created successfully.",
+    "PURCHASE_UPDATED_SUCCESSFULLY": "Purchase Bill updated successfully.",
+    "PURCHASE_DELETED_SUCCESSFULLY": "Purchase Bill deleted successfully."
 }

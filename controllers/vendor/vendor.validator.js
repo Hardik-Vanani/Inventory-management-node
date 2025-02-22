@@ -8,6 +8,8 @@ module.exports = {
             mobileNo: Joi.string()
                 .pattern(/^[0-9]{10}$/)
                 .required(),
+            city: Joi.string(),
+            state: Joi.string()
         }),
     }),
 
@@ -17,7 +19,8 @@ module.exports = {
             mobileNo: Joi.string()
                 .pattern(/^[0-9]{10}$/)
                 .required(),
-            _id: Joi.string().optional(),
+            city: Joi.string(),
+            state: Joi.string()
         }),
 
         params: Joi.object({

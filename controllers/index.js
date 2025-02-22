@@ -21,8 +21,8 @@ module.exports = {
     },
 
     PURCHASE: {
-        APIS: require("./purchase/purchase.controller"),
-        VALIDATOR: require("./purchase/purchase.validator"),
+        APIS: require("./purchase/purchaseBill.controller"),
+        VALIDATOR: require("./purchase/purchaseBill.validator"),
     },
 
     SALE: {

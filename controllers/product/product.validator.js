@@ -6,15 +6,16 @@ module.exports = {
     createProduct: validate({
         body: Joi.object({
             productName: Joi.string().required(),
+            stock: Joi.number(),
             unit: Joi.string(),
-            hsnCode: Joi.string(),
+            hsnCode: Joi.string().allow(""),
         }),
     }),
 
     updateProduct: validate({
         body: Joi.object({
             productName: Joi.string().required(),
-            stock: Joi.number().required(),
+            stock: Joi.number(),
             unit: Joi.string(),
             hsnCode: Joi.string(),
         }),
