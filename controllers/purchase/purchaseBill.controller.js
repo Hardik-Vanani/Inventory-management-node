@@ -10,9 +10,9 @@ module.exports = {
             // Chekck if id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
+            // Fetch purchaseBill & purchaseItems with populated productId and vendorId
             const purchaseBills = await DB.purchase.find(filter).populate("vendorId", "-createdAt -updatedAt -userId").lean();
 
-            // Fetch purchase items with populated productId and vendorId
             const purchaseItems = await DB.purchaseItem.find(filter).populate("productId", "-createdAt -updatedAt -userId").lean().select("-createdAt -updatedAt -userId");
 
             // Group purchase items by purchaseBillId
@@ -105,12 +105,13 @@ module.exports = {
     /* Update Purchase Bill API */
     updatePurchase: async (req, res) => {
         try {
-            const { vendorId, purchaseBillItems } = req.body;
+            const { purchaseBillItems } = req.body;
             const userId = req.user.id;
             const purchaseBillId = req.params.id;
 
-            // Check if purchase bill exists1
-            if (!(await DB.purchase.findOne({ _id: purchaseBillId, userId }))) return response.NOT_FOUND({ res, message: messages.PURCHASE_NOT_FOUND });
+            // Check if purchase bill exists
+            const existingPurchaseBill = await DB.purchase.findOne({ _id: purchaseBillId, userId })
+            if (!existingPurchaseBill) return response.NOT_FOUND({ res, message: messages.PURCHASE_NOT_FOUND });
 
             // Retrieve existing purchase items to adjust stock
             const existingItems = await DB.purchaseItem.find({ purchaseBillId });
@@ -141,7 +142,7 @@ module.exports = {
                 userId,
                 productId: item.productId,
                 purchaseBillId,
-                vendorId,
+                vendorId: existingPurchaseBill.vendorId,
                 qty: item.qty,
                 unit: item.unit,
                 rate: item.rate,
@@ -161,13 +162,10 @@ module.exports = {
                 await DB.report.findOneAndUpdate({ purchaseBillId }, {
                     billNo: req.body.billNo,
                     billDate: req.body.billDate,
-                    vendorId: vendorId,
                     amount: req.body.totalAmount,
                     GSTPercentage: req.body.GSTPercentage,
                     GSTAmount: req.body.GSTAmount,
                     taxableAmount: req.body.finalAmount,
-                    transaction_type: TRASANCTION_TYPE.PURCHASE,
-                    userId,
                 }, { new: true })
             }
             return response.OK({ res, message: messages.PURCHASE_UPDATED_SUCCESSFULLY });

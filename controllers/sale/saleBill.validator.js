@@ -1,13 +1,12 @@
 const { validate } = require("express-validation");
 const Joi = require("joi");
 
-// Validator for routes
 module.exports = {
 
     create: validate({
         body: Joi.object({
             billNo: Joi.string().required(),
-            vendorId: Joi.string()
+            customerId: Joi.string()
                 .pattern(/^[0-9a-fA-F]{24}$/)
                 .message("Invalid ID")
                 .required(),
@@ -18,7 +17,7 @@ module.exports = {
             totalAmount: Joi.number().precision(2),     // amount
             finalAmount: Joi.number().precision(2),     // amount + GST
             remarks: Joi.string().max(250).allow(""),
-            purchaseBillItems: Joi.array().items(Joi.object({
+            saleBillItems: Joi.array().items(Joi.object({
                 productId: Joi.string()
                     .pattern(/^[0-9a-fA-F]{24}$/)
                     .message("Invalid ID")
@@ -52,7 +51,11 @@ module.exports = {
             totalAmount: Joi.number().precision(2),     // amount
             finalAmount: Joi.number().precision(2),     // amount + GST
             remarks: Joi.string().max(250).allow(""),
-            purchaseBillItems: Joi.array().items(Joi.object({
+            saleBillItems: Joi.array().items(Joi.object({
+                _id: Joi.string()
+                    .pattern(/^[0-9a-fA-F]{24}$/)
+                    .message("Invalid ID")
+                    .required(),
                 productId: Joi.string()
                     .pattern(/^[0-9a-fA-F]{24}$/)
                     .message("Invalid ID")
@@ -68,7 +71,7 @@ module.exports = {
         })
     }),
 
-    deletePurchase: validate({
+    delete: validate({
         params: Joi.object({
             id: Joi.string()
                 .pattern(/^[0-9a-fA-F]{24}$/)

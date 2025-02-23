@@ -9,4 +9,6 @@ module.exports = {
     sale: require("./saleBill.model"),
     saleItem: require('./sale-item.model'),
     report: require("./report.model"),
+    expense: require("./expense.model"),
+    income: require("./income.model")
 };

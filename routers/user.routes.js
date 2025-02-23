@@ -20,7 +20,7 @@ router.put("/change-password", auth, VALIDATOR.changePassword, APIS.changePasswo
 
 router.put("/update-profile", auth, upload.single("profileImage"), VALIDATOR.updateProfile, APIS.updateProfile);
 
-// router.put("/forgot-password", VALIDATOR.forgotPassword, APIS.forgotPassword);
+router.put("/forgot-password", VALIDATOR.forgotPassword, APIS.forgotPassword);
 
 
 /* Delete APIs */

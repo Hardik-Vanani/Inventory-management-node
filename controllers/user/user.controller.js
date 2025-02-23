@@ -4,19 +4,19 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 const messages = require('../../json/message.json')
 const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
+const EMAIL = require("../../services/mail/mail.service")
 
 
 module.exports = {
+
     // Get user details
     getUser: async (req, res) => {
         try {
-            console.log('req.user.id::: ', req.user.role);
             let filter = req.user.role === ADMIN
                 ? (req.params.id ? { _id: req.params.id, ...req.query } : { ...req.query })
                 : { _id: req.user.id };
 
 
-            console.log('filter::: ', filter);
             const userDetails = await DB.user.find(filter)
             if (!userDetails) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
 
@@ -84,9 +84,6 @@ module.exports = {
             // Get user id from authenticated user
             const userId = req.user.id;
 
-            const user = await DB.user.findOne({ _id: userId });
-            if (!user) return response.NOT_FOUND({ res });
-
             if (!(await bcryptjs.compare(password, user.password))) return response.UNAUTHORIZED({ res, message: messages.INVALID_PASSWORD });
 
             const hashedPassword = await bcryptjs.hash(newPassword, 10);
@@ -105,9 +102,8 @@ module.exports = {
             if (!(await DB.user.findOne({ _id: userId }))) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
 
             if (req.body.username) {
-                const userExistance = await DB.user.findOne({ username: req.body.username, _id: { $ne: userId } });
-                if (userExistance) return response.EXISTED({ res, message: messages.USERNAME_ALREADY_EXISTS });
-
+                const userExistence = await DB.user.findOne({ username: req.body.username, _id: { $ne: userId } });
+                if (userExistence) return response.EXISTED({ res, message: messages.USERNAME_ALREADY_EXISTS });
             }
 
             if (req.file) {
@@ -128,20 +124,47 @@ module.exports = {
             // Get user id from authenticated user
             const filter = req.user.role === ADMIN ? { _id: req.params.id } : { userId: req.user.id };
 
-            // Find user by id and delete & dekete all record of that User
-            const deletedUser = await DB.user.findByIdAndDelete(filter);
-            await DB.purchase.findByIdAndDelete({ userId: req.user.id })
-            await DB.sale.findByIdAndDelete({ userId: req.user.id })
-            await DB.vendor.findByIdAndDelete({ userId: req.user.id })
-            await DB.customer.findByIdAndDelete({ userId: req.user.id })
-            await DB.product.findByIdAndDelete({ userId: req.user.id })
-            await DB.report.findByIdAndDelete({ userId: req.user.id })
-            await DB.taskManager.findByIdAndDelete({ userId: req.user.id })
+            // Find user by id and delete & delete all record of that User
+            await DB.user.findOneAndDelete(filter);
 
-            return response.OK({ res, payload: { deletedUser } });
+            await DB.purchase.deleteMany({ userId: req.user.id })
+            await DB.purchaseItem.deleteMany({ userId: req.user.id })
+            await DB.sale.deleteMany({ userId: req.user.id })
+            await DB.saleItem.deleteMany({ userId: req.user.id })
+            await DB.vendor.deleteMany({ userId: req.user.id })
+            await DB.customer.deleteMany({ userId: req.user.id })
+            await DB.product.deleteMany({ userId: req.user.id })
+            await DB.report.deleteMany({ userId: req.user.id })
+            await DB.taskManager.deleteMany({ userId: req.user.id })
+
+            return response.OK({ res, message: messages.USER_DELETED_SUCCESSFULLY });
         } catch (error) {
             console.error("Error deleting user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
     },
+
+    // Forgot password
+    forgotPassword: async (req, res) => {
+        const { email } = req.body;
+        try {
+            const user = await DB.user.findOne({ email })
+            if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+
+            // Generate 4-digit OTP
+            const otp = Math.floor(1000 + Math.random() * 9000).toString();
+            const otpExpiry = new Date(Date.now() + 2 * 60 * 1000); // Expires in 2 minutes
+
+            await DB.user.findOneAndUpdate({ email }, { otp, otpExpiry }, { new: true });
+
+            const sendMail = EMAIL.sendOTP({ email, name: user.username, otp })
+            if (!sendMail) return response.BAD_REQUEST({ res, message: messages.FAILED_SEND_MAIL })
+
+            return response.OK({ res, message: messages.SEND_MAIL_SUCCESSFULLY })
+
+        } catch (error) {
+            console.error("Error in sending Otp", error)
+            return response.INTERNAL_SERVER_ERROR({ res })
+        }
+    }
 };

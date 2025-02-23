@@ -6,11 +6,11 @@ let saleItemSchema = new Schema(
         productId: { type: Schema.Types.ObjectId, ref: "product" },
         saleBillId: { type: Schema.Types.ObjectId, ref: "saleBill" },
         customerId: { type: Schema.Types.ObjectId, ref: "customer" },
-        hsnCode: { type: String, default: "" },
         qty: { type: Number, required: true },
-        GSTPercentage: { type: Number, default: 0 },
         unit: { type: String, required: true },
         rate: { type: Number, required: true },
+        GSTPercentage: { type: Number, default: 0 },
+        GSTAmount: { type: Number, default: 0 },
         totalAmount: { type: Number, default: 0 }, // rate * qty
     },
     {

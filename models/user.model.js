@@ -18,6 +18,8 @@ let user_schema = new Schema(
             type: String,
             require: true,
         },
+        otp: { type: String },
+        otpExpiry: { type: Date, expires: 300 },    // OTP will auto-delete after 5 minutes
         firstName: { type: String, },
         lastName: { type: String, },
         city: { type: String, },
