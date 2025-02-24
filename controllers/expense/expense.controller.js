@@ -41,7 +41,7 @@ module.exports = {
             if (!(await DB.expense.findOne({ _id: req.params.id, userId: req.user.id }))) return response.NOT_FOUND({ res, message: messages.EXPENSE_NOT_FOUND })
 
             await DB.expense.findOneAndUpdate({ _id: req.params.id, userId: req.user.id }, req.body, { new: true })
-            return response.OK({ res, message: messages.EXPENSE_FETCHED_SUCCESSFULLY })
+            return response.OK({ res, message: messages.EXPENSE_UPDATED_SUCCESSFULLY })
         } catch (error) {
             console.error("Error in updating expense", error)
             return response.INTERNAL_SERVER_ERROR({ res })

@@ -6,6 +6,7 @@ const incomeSchema = new Schema(
         supplierName: { type: String },
         paymentMode: { type: String, require: true },
         amount: { type: Number },
+        note: { type: String },
         userId: { type: Schema.Types.ObjectId, ref: "user" },
     },
     {
