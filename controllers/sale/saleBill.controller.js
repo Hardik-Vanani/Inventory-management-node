@@ -11,7 +11,7 @@ module.exports = {
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
             // Fetch saleBill & saleItems with populated saleId and customerId
-            const saleBills = await DB.sale.find(filter).populate("customerId", "-createdAt -updatedAt -userId").lean();
+            const saleBills = await DB.sale.find(filter).populate("userId", "-password -otp -otpExpiry -role -createdAt -updatedAt").populate("customerId", "-createdAt -updatedAt -userId").lean();
 
             const saleItems = await DB.saleItem.find(filter).populate("productId", "-createdAt -updatedAt -userId").lean().select("-createdAt -updatedAt -userId");
 

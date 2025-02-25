@@ -4,6 +4,6 @@ const auth = require("../middleware/auth.middleware");
 
 const { INVOICE: { APIS } } = require('../controllers')
 
-router.get("/:id", auth, APIS.generateInvoicePDF)
+router.post("/", auth, APIS.generateInvoicePDF)
 
 module.exports = router;
