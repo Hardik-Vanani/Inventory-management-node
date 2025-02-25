@@ -14,5 +14,6 @@ module.exports = {
         }
 
         await transporter.sendMail(mailOptions)
+        return { success: true }
     }
 }

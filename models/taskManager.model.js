@@ -14,7 +14,7 @@ const taskManagerSchema = new Schema(
             type: String,
             default: "Pending",
         },
-        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        userId: { type: Schema.Types.ObjectId, ref: "users" },
     },
     {
         versionKey: false,

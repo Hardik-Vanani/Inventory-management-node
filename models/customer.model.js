@@ -6,7 +6,7 @@ const schema = new Schema(
         mobileNo: { type: String, required: true, },
         city: { type: String },
         state: { type: String },
-        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        userId: { type: Schema.Types.ObjectId, ref: "users" },
     },
     {
         versionKey: false,

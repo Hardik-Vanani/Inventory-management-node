@@ -57,5 +57,33 @@ module.exports = {
                 }),
 
         })
+    }),
+
+    verifyOtp: validate({
+        body: Joi.object({
+            email: Joi.string()
+                .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+                .required()
+                .messages({
+                    "string.pattern.base": "Please enter a valid email address",
+                    "string.empty": "Email field cannot be empty",
+                    "any.required": "Email is required",
+                }),
+            otp: Joi.number()
+        })
+    }),
+
+    resetPassword: validate({
+        body: Joi.object({
+            email: Joi.string()
+                .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+                .required()
+                .messages({
+                    "string.pattern.base": "Please enter a valid email address",
+                    "string.empty": "Email field cannot be empty",
+                    "any.required": "Email is required",
+                }),
+            password: Joi.string().required()
+        })
     })
 };

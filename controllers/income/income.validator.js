@@ -5,6 +5,7 @@ module.exports = {
     create: validate({
         body: Joi.object({
             incomeName: Joi.string().required(),
+            incomeDate: Joi.date(),
             supplierName: Joi.string(),
             paymentMode: Joi.string(),
             amount: Joi.number(),

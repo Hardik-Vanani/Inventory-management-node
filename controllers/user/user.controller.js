@@ -4,7 +4,8 @@ const response = require("../../helpers/response.helper");
 const DB = require("../../models");
 const messages = require('../../json/message.json')
 const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
-const EMAIL = require("../../services/mail/mail.service")
+const EMAIL = require("../../services/mail/mail.service");
+const { verifyOtp } = require("./user.validator");
 
 
 module.exports = {
@@ -46,7 +47,7 @@ module.exports = {
             // Generate JWT token
             const token = jwt.sign({ id, name, role }, process.env.SECRET_KEY, { expiresIn: "50d" });
 
-            return response.OK({ res, payload: { id, name, token, role } });
+            return response.OK({ res, message: messages.USER_LOGIN_SUCCESSFULLY, payload: { id, name, token, role } });
         } catch (error) {
             console.error("Error logging user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -68,7 +69,7 @@ module.exports = {
             const hashedPassword = await bcryptjs.hash(password, 10);
             const newUser = await DB.user.create({ username, password: hashedPassword, email, role, profileImage: "https://openclipart.org/image/800px/346569" });
 
-            return response.OK({ res, payload: { newUser } });
+            return response.OK({ res, message: messages.USER_CREATED_SUCCESSFULLY, payload: newUser });
         } catch (error) {
             console.error("Error creating user: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -87,7 +88,7 @@ module.exports = {
             if (!(await bcryptjs.compare(password, user.password))) return response.UNAUTHORIZED({ res, message: messages.INVALID_PASSWORD });
 
             const hashedPassword = await bcryptjs.hash(newPassword, 10);
-            await DB.user.findByIdAndUpdate(userId, { password: hashedPassword }, { new: true })
+            await DB.user.findByIdAndUpdate({ userId }, { password: hashedPassword }, { new: true })
             return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY });
         } catch (error) {
             console.error("Error updating user: ", error);
@@ -122,7 +123,7 @@ module.exports = {
     deleteUser: async (req, res) => {
         try {
             // Get user id from authenticated user
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { userId: req.user.id };
+            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.user.id };
 
             // Find user by id and delete & delete all record of that User
             await DB.user.findOneAndDelete(filter);
@@ -153,11 +154,11 @@ module.exports = {
 
             // Generate 4-digit OTP
             const otp = Math.floor(1000 + Math.random() * 9000).toString();
-            const otpExpiry = new Date(Date.now() + 2 * 60 * 1000); // Expires in 2 minutes
+            const otpExpiry = new Date(Date.now() + 5 * 30 * 1000); // Expires in 5 minutes
 
-            await DB.user.findOneAndUpdate({ email }, { otp, otpExpiry }, { new: true });
+            await DB.user.findOneAndUpdate({ email }, { otp: otp, otpExpiry: otpExpiry }, { new: true });
 
-            const sendMail = EMAIL.sendOTP({ email, name: user.username, otp })
+            const sendMail = await EMAIL.sendOTP({ email, name: user.username, otp })
             if (!sendMail) return response.BAD_REQUEST({ res, message: messages.FAILED_SEND_MAIL })
 
             return response.OK({ res, message: messages.SEND_MAIL_SUCCESSFULLY })
@@ -166,5 +167,31 @@ module.exports = {
             console.error("Error in sending Otp", error)
             return response.INTERNAL_SERVER_ERROR({ res })
         }
-    }
+    },
+
+
+    verifyOtp: async (req, res) => {
+        let { email, otp } = req.body
+        const user = await DB.user.findOne({ email })
+        if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+
+        if (user.otp !== otp) return response.BAD_REQUEST({ res, message: messages.INVALID_OTP })
+
+        // Check if OTP is expired
+        if (new Date() > user.otpExpiry) {
+            return response.BAD_REQUEST({ res, message: messages.OTP_EXPIRED });
+        }
+        return response.OK({ res, message: messages.OTP_VERIFIED })
+    },
+
+
+    resetPassword: async (req, res) => {
+        let { email, password } = req.body
+        const user = await DB.user.findOne({ email })
+        if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+
+        const hashedPassword = await bcryptjs.hash(password, 10);
+        await DB.user.findOneAndUpdate({ email }, { password: hashedPassword }, { new: true })
+        return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY })
+    },
 };

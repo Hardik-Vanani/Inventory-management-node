@@ -48,5 +48,13 @@ module.exports = {
     INCOME: {
         APIS: require("./income/income.controller"),
         VALIDATOR: require("./income/income.validator")
+    },
+
+    CSV: {
+        APIS: require("./CSV/csv.controller")
+    },
+
+    INVOICE: {
+        APIS: require("./invoice/invoice.controller")
     }
 };

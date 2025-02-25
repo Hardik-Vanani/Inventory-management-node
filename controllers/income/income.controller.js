@@ -26,8 +26,9 @@ module.exports = {
         try {
             const userId = req.user.id
             if (!(await DB.user.findOne({ _id: userId }))) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+            const date = req.body.incomeDate ? new Date(req.body.incomeDate) : new Date();
 
-            await DB.income.create({ ...req.body, userId })
+            await DB.income.create({ ...req.body, incomeDate: date, userId })
             return response.CREATED({ res, message: messages.INCOME_CREATED_SUCCESSFULLY })
         } catch (error) {
             console.error("Error in creating income", error)

@@ -10,5 +10,7 @@ routes.use("/sale", require("./saleBill.routes"));
 routes.use("/reports", require("./report.routes"));
 routes.use("/expense", require("./expense.routes"));
 routes.use("/income", require("./income.routes"));
+routes.use("/csv", require('./csvDown.routes'))
+routes.use("/invoice", require('./invoice.routes'))
 
 module.exports = routes;

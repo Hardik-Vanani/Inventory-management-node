@@ -3,7 +3,7 @@ const { Schema, model, default: mongoose } = require("mongoose");
 let sale_schema = new Schema(
 
     {
-        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        userId: { type: Schema.Types.ObjectId, ref: "users" },
         customerId: { type: Schema.Types.ObjectId, ref: "customer" },
         billNo: { type: String, required: true, },
         billDate: { type: Date },

@@ -1,7 +1,5 @@
 const { Schema, model } = require("mongoose");
-const {
-    USER_TYPE: { USER },
-} = require("../json/enum.json");
+const { USER_TYPE: { USER }, } = require("../json/enum.json");
 
 let user_schema = new Schema(
     {
@@ -11,7 +9,6 @@ let user_schema = new Schema(
         },
         username: {
             type: String,
-            unique: true,
             require: true,
         },
         password: {
@@ -19,7 +16,7 @@ let user_schema = new Schema(
             require: true,
         },
         otp: { type: String },
-        otpExpiry: { type: Date, expires: 300 },    // OTP will auto-delete after 5 minutes
+        otpExpiry: { type: Date },
         firstName: { type: String, },
         lastName: { type: String, },
         city: { type: String, },

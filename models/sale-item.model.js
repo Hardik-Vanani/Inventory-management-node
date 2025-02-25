@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose")
 
 let saleItemSchema = new Schema(
     {
-        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        userId: { type: Schema.Types.ObjectId, ref: "users" },
         productId: { type: Schema.Types.ObjectId, ref: "product" },
         saleBillId: { type: Schema.Types.ObjectId, ref: "saleBill" },
         customerId: { type: Schema.Types.ObjectId, ref: "customer" },

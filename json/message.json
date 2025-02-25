@@ -3,6 +3,8 @@
     "USER_ALREADY_EXISTS": "User Already Exists.",
     "USERNAME_ALREADY_EXISTS": "Username Already Exists.",
     "USER_NOT_FOUND": "User not found.",
+    "USER_LOGIN_SUCCESSFULLY": "User logIn successfully",
+    "USER_CREATED_SUCCESSFULLY": "User created successfully",
     "USER_UPDATED_SUCCESSFULLY": "User updated successfully.",
     "USER_FETCHED_SUCCESSFULLY": "USer fetched successfully.",
     "USER_DELETED_SUCCESSFULLY": "USer deleted successfully.",
@@ -44,5 +46,8 @@
     "INCOME_UPDATED_SUCCESSFULLY": "Income updated successfully.",
     "INCOME_DELETED_SUCCESSFULLY": "Income deleted successfully.",
     "SEND_MAIL_SUCCESSFULLY": "Send OTP on your mail successfully",
-    "FAILED_SEND_MAIL": "Failed to send OTP."
+    "FAILED_SEND_MAIL": "Failed to send OTP.",
+    "INVALID_OTP": "Invalid OTP",
+    "OTP_EXPIRED": "OTP Expired",
+    "OTP_VERIFIED": "OTP has been Verified successfully"
 }

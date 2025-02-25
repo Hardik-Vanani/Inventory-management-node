@@ -27,7 +27,9 @@ module.exports = {
             const userId = req.user.id
             if (!(await DB.user.findOne({ _id: userId }))) return response.NOT_FOUND({ res, message: messages.USERNAME_ALREADY_EXISTS })
 
-            await DB.expense.create({ ...req.body, userId })
+            const date = req.body.expenseDate ? new Date(req.body.expenseDate) : new Date();
+
+            await DB.expense.create({ ...req.body, expenseDate: date, userId })
             return response.CREATED({ res, message: messages.EXPENSE_CREATED_SUCCESSFULLY })
         } catch (error) {
             console.error("Error in creating expense", error)

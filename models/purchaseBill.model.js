@@ -2,7 +2,7 @@ const { Schema, model, default: mongoose } = require("mongoose");
 
 let purchaseBill = new Schema(
     {
-        userId: { type: Schema.Types.ObjectId, ref: "user" },
+        userId: { type: Schema.Types.ObjectId, ref: "users" },
         vendorId: { type: Schema.Types.ObjectId, ref: "vendor" },
         billNo: { type: String, required: true, },
         billDate: { type: Date },
