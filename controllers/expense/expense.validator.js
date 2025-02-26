@@ -5,10 +5,11 @@ module.exports = {
     create: validate({
         body: Joi.object({
             expenseName: Joi.string().required(),
+            expenseDate: Joi.date(),
             supplierName: Joi.string(),
             paymentMode: Joi.string(),
             amount: Joi.number(),
-            note: Joi.string()
+            note: Joi.string().allow("")
         })
     }),
 
@@ -25,7 +26,7 @@ module.exports = {
             supplierName: Joi.string(),
             paymentMode: Joi.string(),
             amount: Joi.number(),
-            note: Joi.string()
+            note: Joi.string().allow("")
         })
     }),
 
