@@ -9,7 +9,7 @@ module.exports = {
             supplierName: Joi.string(),
             paymentMode: Joi.string(),
             amount: Joi.number(),
-            note: Joi.string()
+            note: Joi.string().allow("")
         })
     }),
 
@@ -26,7 +26,7 @@ module.exports = {
             supplierName: Joi.string(),
             paymentMode: Joi.string(),
             amount: Joi.number(),
-            note: Joi.string()
+            note: Joi.string().allow("")
         })
     }),
 
