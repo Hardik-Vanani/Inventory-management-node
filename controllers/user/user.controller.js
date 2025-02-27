@@ -67,7 +67,7 @@ module.exports = {
 
             // Password hashed by bcryptjs
             const hashedPassword = await bcryptjs.hash(password, 10);
-            const newUser = await DB.user.create({ username, password: hashedPassword, email, role, profileImage: "https://openclipart.org/image/800px/346569" });
+            const newUser = await DB.user.create({ username, password: hashedPassword, email, role });
 
             return response.OK({ res, message: messages.USER_CREATED_SUCCESSFULLY, payload: newUser });
         } catch (error) {
@@ -84,11 +84,13 @@ module.exports = {
 
             // Get user id from authenticated user
             const userId = req.user.id;
+            const user = await DB.user.findOne({ _id: userId })
+            if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
 
             if (!(await bcryptjs.compare(password, user.password))) return response.UNAUTHORIZED({ res, message: messages.INVALID_PASSWORD });
 
             const hashedPassword = await bcryptjs.hash(newPassword, 10);
-            await DB.user.findByIdAndUpdate({ userId }, { password: hashedPassword }, { new: true })
+            await DB.user.findByIdAndUpdate(userId, { password: hashedPassword }, { new: true })
             return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY });
         } catch (error) {
             console.error("Error updating user: ", error);
@@ -108,7 +110,7 @@ module.exports = {
             }
 
             if (req.file) {
-                req.body.profileImage = `/uploads/${req.file.filename}`; // Save file path
+                req.body.profileImage = `/uploads/${req.file.filename}`;
             }
 
             await DB.user.findByIdAndUpdate(userId, req.body, { new: true })

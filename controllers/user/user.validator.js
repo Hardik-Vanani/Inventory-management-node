@@ -41,7 +41,8 @@ module.exports = {
             lastName: Joi.string(),
             city: Joi.string(),
             state: Joi.string(),
-            shopName: Joi.string()
+            shopName: Joi.string(),
+            profileImage: Joi.string().allow("")
         })
     }),
 
