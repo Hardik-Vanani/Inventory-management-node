@@ -28,6 +28,7 @@ module.exports = {
                 rate: Joi.number(),
                 GSTPercentage: Joi.number().precision(2),
                 GSTAmount: Joi.number().precision(2),
+                amount: Joi.number().precision(2),
                 totalAmount: Joi.number().precision(2),     // (rate * qty) + GST
             }))
 
@@ -45,6 +46,10 @@ module.exports = {
 
         body: Joi.object({
             billNo: Joi.string().required(),
+            vendorId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .message("Invalid ID")
+                .required(),
             billDate: Joi.date(),
             isGSTBill: Joi.boolean().required(),
             GSTPercentage: Joi.number().precision(2),
@@ -62,6 +67,7 @@ module.exports = {
                 rate: Joi.number(),
                 GSTPercentage: Joi.number().precision(2),
                 GSTAmount: Joi.number().precision(2),
+                amount: Joi.number().precision(2),
                 totalAmount: Joi.number().precision(2),     // (rate * qty) + GST
             }))
 

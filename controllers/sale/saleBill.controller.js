@@ -10,10 +10,18 @@ module.exports = {
             // Chekck if id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            // Fetch saleBill & saleItems with populated saleId and customerId
+            // Fetch purchaseBill & purchaseItems with populated productId and vendorId
             const saleBills = await DB.sale.find(filter).populate("userId", "-password -otp -otpExpiry -role -createdAt -updatedAt").populate("customerId", "-createdAt -updatedAt -userId").lean();
 
-            const saleItems = await DB.saleItem.find(filter).populate("productId", "-createdAt -updatedAt -userId").lean().select("-createdAt -updatedAt -userId");
+            const saleBillIds = saleBills.map(bill => bill._id);
+
+            const saleItems = await DB.saleItem.find({
+                saleBillId: { $in: saleBillIds }
+            })
+                .populate("productId", "-createdAt -updatedAt -userId")
+                .lean()
+                .select("-createdAt -updatedAt -userId");
+
 
             // Group sale items by saleBillId
             const saleItemsMap = saleItems.reduce((acc, item) => {

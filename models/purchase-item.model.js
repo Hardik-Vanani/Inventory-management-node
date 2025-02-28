@@ -11,6 +11,7 @@ let purchaseItemSchema = new Schema(
         rate: { type: Number, required: true },
         GSTPercentage: { type: Number, default: 0 },
         GSTAmount: { type: Number, default: 0 },
+        amount: { type: Number, default: 0 },
         totalAmount: { type: Number, default: 0 }, // rate * qty
     },
     {

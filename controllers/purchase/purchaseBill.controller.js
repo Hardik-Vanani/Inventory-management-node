@@ -13,7 +13,15 @@ module.exports = {
             // Fetch purchaseBill & purchaseItems with populated productId and vendorId
             const purchaseBills = await DB.purchase.find(filter).populate("userId", "-password -otp -otpExpiry -role -createdAt -updatedAt").populate("vendorId", "-createdAt -updatedAt -userId").lean();
 
-            const purchaseItems = await DB.purchaseItem.find(filter).populate("productId", "-createdAt -updatedAt -userId").lean().select("-createdAt -updatedAt -userId");
+            const purchaseBillIds = purchaseBills.map(bill => bill._id);
+
+            const purchaseItems = await DB.purchaseItem.find({
+                purchaseBillId: { $in: purchaseBillIds }
+            })
+            .populate("productId", "-createdAt -updatedAt -userId")
+            .lean()
+            .select("-createdAt -updatedAt -userId");
+            
 
             // Group purchase items by purchaseBillId
             const purchaseItemsMap = purchaseItems.reduce((acc, item) => {
@@ -29,7 +37,7 @@ module.exports = {
                 purchaseItems: purchaseItemsMap[bill._id.toString()] || []
             }));
 
-            return response.OK({ res, count: result.length, message: messages.URCHASE_FETCHED_SUCCESSFULLY, payload: { purchaseBills: result } });
+            return response.OK({ res, count: result.length, message: messages.PURCHASE_FETCHED_SUCCESSFULLY, payload: { purchaseBills: result } });
         } catch (error) {
             console.error("Error getting purchase: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
@@ -70,6 +78,7 @@ module.exports = {
                 rate: item.rate,
                 GSTPercentage: item.GSTPercentage,
                 GSTAmount: item.GSTAmount,
+                amount: item.amount,
                 totalAmount: item.totalAmount,
             }));
             await DB.purchaseItem.insertMany(purchaseItems);
@@ -148,6 +157,7 @@ module.exports = {
                 rate: item.rate,
                 GSTPercentage: item.GSTPercentage,
                 GSTAmount: item.GSTAmount,
+                amount: item.amount,
                 totalAmount: item.totalAmount,
             }));
             await DB.purchaseItem.insertMany(newPurchaseItems);
@@ -178,7 +188,7 @@ module.exports = {
     /* Delete Purchase Bill API */
     deletePurchase: async (req, res) => {
         try {
-            if (!(await DB.purchase.findOne(req.params.id))) return response.NOT_FOUND({ res, message: messages.PURCHASE_NOT_FOUND });
+            if (!(await DB.purchase.findOne({ _id: req.params.id }))) return response.NOT_FOUND({ res, message: messages.PURCHASE_NOT_FOUND });
 
             await DB.purchase.findByIdAndDelete(req.params.id)
             await DB.purchaseItem.deleteMany({ purchaseBillId: req.params.id })
