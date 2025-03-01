@@ -9,13 +9,14 @@ module.exports = {
             const filter = req.params.id ? { _id: req.params.id, userId } : { ...req.query, userId };
             const transactionData = await DB.report
                 .find(filter)
-                .populate({ path: "productID", select: "-userId -createdAt -updatedAt" })
-                .populate({ path: "vendorId", select: "-userId -createdAt -updatedAt" })
-                .populate({ path: "customerID", select: "-userId -createdAt -updatedAt" })
+                .populate("purchaseBillId", "-createdAt -updatedAt")
+                .populate("saleBillId", "-createdAt -updatedAt")
+                .populate("customerId", "-createdAt -updatedAt")
+                .populate("vendorId", "-createdAt -updatedAt")
                 .select("-userId -createdAt -updatedAt");
 
             return response.OK({ res, count: transactionData.length, payload: { transactionData } });
-        } catch {
+        } catch (error) {
             console.error("Error getting report: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
         }
@@ -30,7 +31,7 @@ module.exports = {
 
             const deleteSummary = await DB.report.findByIdAndDelete(filter);
             if (!deleteSummary) return response.NOT_FOUND({ res });
-            
+
             return response.OK({ res, payload: { deleteSummary } });
         } catch (error) {
             console.error("Error deleting report: ", error);
