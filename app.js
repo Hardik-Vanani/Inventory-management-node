@@ -2,7 +2,6 @@ require("dotenv").config();
 require("./config/db.conn");
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const fs = require('fs');
 const path = require('path');
 
@@ -12,7 +11,7 @@ const path = require('path');
 // Handle error
 const errorHandler = require("./middleware/errorhandler.middleware");
 
-app.use(cors("*"));
+app.use(require('cors')({ origin: '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

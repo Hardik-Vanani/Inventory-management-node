@@ -14,7 +14,7 @@ router.post("/signin", VALIDATOR.loginUser, APIS.loginUser);
 
 router.post("/signup", VALIDATOR.createUser, APIS.createUser);
 
-router.post("/forgot-password", VALIDATOR.forgotPassword, APIS.forgotPassword);
+router.post("/send-otp", VALIDATOR.forgotPassword, APIS.forgotPassword);
 
 router.post("/verify-otp", VALIDATOR.verifyOtp, APIS.verifyOtp);
 
