@@ -11,7 +11,7 @@ module.exports = {
             // Check role or If id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            const expense = await DB.expense.find(filter);
+            const expense = await DB.expense.find(filter).sort({ createdAt: -1 });
             const totalAmount = expense.reduce((sum, exp) => sum + (exp.amount || 0), 0);
 
             return response.OK({ res, count: expense.length, message: messages.EXPENSE_FETCHED_SUCCESSFULLY, payload: { totalExpenseAmount: totalAmount, expense } })

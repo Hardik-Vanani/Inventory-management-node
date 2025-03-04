@@ -9,7 +9,7 @@ module.exports = {
     getProduct: async (req, res) => {
         try {
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
-            const productData = await DB.product.find(filter).select("-createdAt -updatedAt");
+            const productData = await DB.product.find(filter).select("-createdAt -updatedAt").sort({ createdAt: -1 });
 
             return response.OK({ res, count: productData.length, message: messages.PRODUCT_FETCHED_SUCCESSFULLY, payload: { productData } });
         } catch (error) {

@@ -9,12 +9,12 @@ module.exports = {
             const filter = req.params.id ? { _id: req.params.id, userId } : { ...req.query, userId };
             const transactionData = await DB.report
                 .find(filter)
+                .sort({ createdAt: -1 })
                 .populate("purchaseBillId", "-createdAt -updatedAt")
                 .populate("saleBillId", "-createdAt -updatedAt")
                 .populate("customerId", "-createdAt -updatedAt")
                 .populate("vendorId", "-createdAt -updatedAt")
                 .select("-userId -createdAt -updatedAt");
-
             return response.OK({ res, count: transactionData.length, payload: { transactionData } });
         } catch (error) {
             console.error("Error getting report: ", error);

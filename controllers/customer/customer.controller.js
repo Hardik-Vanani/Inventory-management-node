@@ -10,7 +10,7 @@ module.exports = {
             // Check role or If id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt");
+            const customerData = await DB.customer.find(filter).select("-createdAt -updatedAt").sort({ createdAt: -1 });
 
             // return response
             return response.OK({

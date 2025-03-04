@@ -10,7 +10,7 @@ module.exports = {
             // check if id is present in params
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
-            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -userId");
+            const vendorData = await DB.vendor.find(filter).select("-createdAt -updatedAt -userId").sort({ createdAt: -1 });
 
             return response.OK({ res, message: messages.VENDOR_FETCHED_SUCCESSFULLY, count: vendorData.length, payload: { vendorData } });
         } catch (error) {

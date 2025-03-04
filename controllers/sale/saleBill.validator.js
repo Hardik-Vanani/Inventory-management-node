@@ -27,6 +27,7 @@ module.exports = {
                 rate: Joi.number(),
                 GSTPercentage: Joi.number().precision(2),
                 GSTAmount: Joi.number().precision(2),
+                amount: Joi.number().precision(2),
                 totalAmount: Joi.number().precision(2),     // (rate * qty) + GST
             }))
 

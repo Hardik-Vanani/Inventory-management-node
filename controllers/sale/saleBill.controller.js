@@ -11,7 +11,7 @@ module.exports = {
             const filter = req.params.id ? (req.user.role === ADMIN ? { _id: req.param.id, ...req.query } : { _id: req.params.id, userId: req.user.id, ...req.query }) : req.user.role === ADMIN ? { ...req.query } : { userId: req.user.id, ...req.query };
 
             // Fetch purchaseBill & purchaseItems with populated productId and vendorId
-            const saleBills = await DB.sale.find(filter).populate("userId", "-password -otp -otpExpiry -role -createdAt -updatedAt").populate("customerId", "-createdAt -updatedAt -userId").lean();
+            const saleBills = await DB.sale.find(filter).populate("userId", "-password -otp -otpExpiry -role -createdAt -updatedAt").populate("customerId", "-createdAt -updatedAt -userId").sort({ createdAt: -1 }).lean();
 
             const saleBillIds = saleBills.map(bill => bill._id);
 
@@ -37,7 +37,7 @@ module.exports = {
                 saleItems: saleItemsMap[bill._id.toString()] || []
             }));
 
-            return response.OK({ res, count: result.length, message: messages.SALE_FETCHED_SUCCESSFULLY, payload: { result } });
+            return response.OK({ res, count: result.length, message: messages.SALE_FETCHED_SUCCESSFULLY, payload: { saleBills: result } });
         } catch (error) {
             console.error("Error getting sale: ", error);
             return response.INTERNAL_SERVER_ERROR({ res });
