@@ -29,7 +29,7 @@ const pdfDir = path.join(__dirname, "generated-pdfs");
 if (!fs.existsSync(pdfDir)) {
     fs.mkdirSync(pdfDir);
 }
-app.use("/invoice", express.static(path.join(__dirname, "generated-pdfs")));
+app.use("/invoice", express.static(path.join(__dirname, "controllers/invoice/generated-pdfs")));
 
 // app.post('/generate-pdf', async (req, res) => {
 //     const { title, content, items, total } = req.body;

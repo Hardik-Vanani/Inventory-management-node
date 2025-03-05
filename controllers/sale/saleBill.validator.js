@@ -45,6 +45,10 @@ module.exports = {
 
         body: Joi.object({
             billNo: Joi.string().required(),
+            customerId: Joi.string()
+                .pattern(/^[0-9a-fA-F]{24}$/)
+                .message("Invalid ID")
+                .required(),
             billDate: Joi.date(),
             isGSTBill: Joi.boolean().required(),
             GSTPercentage: Joi.number().precision(2),
