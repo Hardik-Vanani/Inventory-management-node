@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { USER_TYPE: { USER }, } = require("../json/enum.json");
+const { type } = require("os");
 
 let user_schema = new Schema(
     {
@@ -27,6 +28,7 @@ let user_schema = new Schema(
             type: String,
             default: USER,
         },
+        isActive: { type: Boolean, default: true }
     },
     {
         versionKey: false,

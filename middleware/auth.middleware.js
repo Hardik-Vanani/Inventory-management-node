@@ -1,5 +1,7 @@
 const response = require("../helpers/response.helper");
 const jwt = require("jsonwebtoken");
+const DB = require("../models");
+
 
 const auth = (req, res, next) => {
     try {
@@ -15,7 +17,9 @@ const auth = (req, res, next) => {
                     return response.TOKEN_NEEDED({ res, err });
                 }
             }
-            
+            const user = DB.user.findOne({ _id: decoded._id, isActive: true })
+            if (!user) return response.NOT_FOUND({ res, message: "User not found" });
+
             req.user = decoded;
             req.token = token;
 

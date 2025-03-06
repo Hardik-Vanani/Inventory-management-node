@@ -26,6 +26,8 @@ router.put("/update-profile", auth, upload.single("profileImage"), VALIDATOR.upd
 
 router.put("/reset-password", VALIDATOR.resetPassword, APIS.resetPassword);
 
+router.put("/admin/:id", APIS.deActivateUser)
+
 
 
 /* Delete APIs */

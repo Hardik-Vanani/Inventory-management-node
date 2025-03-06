@@ -22,7 +22,7 @@ module.exports = {
                     "string.empty": "Email field cannot be empty",
                     "any.required": "Email is required",
                 }),
-
+            isActive: Joi.boolean().default(true),
         }),
     }),
 

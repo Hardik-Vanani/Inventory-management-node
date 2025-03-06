@@ -49,5 +49,7 @@
     "FAILED_SEND_MAIL": "Failed to send OTP.",
     "INVALID_OTP": "Invalid OTP",
     "OTP_EXPIRED": "OTP Expired",
-    "OTP_VERIFIED": "OTP has been Verified successfully"
+    "OTP_VERIFIED": "OTP has been Verified successfully",
+    "USER_DEACTIVATED_SUCCESSFULLY": "User Deactivated successfully",
+    "USER_ACTIVATED_SUCCESSFULLY": "User Activated successfully"
 }

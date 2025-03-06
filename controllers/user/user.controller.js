@@ -196,4 +196,22 @@ module.exports = {
         await DB.user.findOneAndUpdate({ email }, { password: hashedPassword }, { new: true })
         return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY })
     },
+
+    
+    deActivateUser: async (req, res) => {
+        try {
+            const user = await DB.user.findOne({ _id: req.params.id })
+            if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+
+            if (user.isActive) {
+                await DB.user.findOneAndUpdate({ _id: req.params.id }, { isActive: false }, { new: true })
+                return response.OK({ res, message: messages.USER_DEACTIVATED_SUCCESSFULLY })
+            } else {
+                await DB.user.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { new: true })
+                return response.OK({ res, message: messages.USER_ACTIVATED_SUCCESSFULLY })
+            }
+        } catch (error) {
+            return response.INTERNAL_SERVER_ERROR({ res, message: error })
+        }
+    }
 };
