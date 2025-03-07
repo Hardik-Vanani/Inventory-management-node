@@ -31,7 +31,7 @@ module.exports = {
     getUserData: async (req, res) => {
         try {
             // Fetch all users
-            const users = await DB.user.find().select("-password -otp -otpExpiry -createdAt -updatedAt");
+            const users = await DB.user.find().select("-password -otp -otpExpiry");
 
             // Fetch purchase and sale bill counts for each user
             const userData = await Promise.all(users.map(async (user) => {
@@ -151,27 +151,28 @@ module.exports = {
     // Delete user
     deleteUser: async (req, res) => {
         try {
-            // Get user id from authenticated user
-            const filter = req.user.role === ADMIN ? { _id: req.params.id } : { _id: req.user.id };
+            // Determine the correct user ID to delete
+            const userIdToDelete = req.user.role === ADMIN ? req.params.id : req.user.id;
 
-            // Find user by id and delete & delete all record of that User
-            await DB.user.findOneAndDelete(filter);
+            // Delete the user
+            await DB.user.findOneAndDelete({ _id: userIdToDelete });
 
-            await DB.purchase.deleteMany({ userId: req.user.id })
-            await DB.purchaseItem.deleteMany({ userId: req.user.id })
-            await DB.sale.deleteMany({ userId: req.user.id })
-            await DB.saleItem.deleteMany({ userId: req.user.id })
-            await DB.vendor.deleteMany({ userId: req.user.id })
-            await DB.customer.deleteMany({ userId: req.user.id })
-            await DB.product.deleteMany({ userId: req.user.id })
-            await DB.report.deleteMany({ userId: req.user.id })
-            await DB.taskManager.deleteMany({ userId: req.user.id })
+            // Delete all related records of that user
+            await DB.purchase.deleteMany({ userId: userIdToDelete });
+            await DB.purchaseItem.deleteMany({ userId: userIdToDelete });
+            await DB.sale.deleteMany({ userId: userIdToDelete });
+            await DB.saleItem.deleteMany({ userId: userIdToDelete });
+            await DB.vendor.deleteMany({ userId: userIdToDelete });
+            await DB.customer.deleteMany({ userId: userIdToDelete });
+            await DB.product.deleteMany({ userId: userIdToDelete });
+            await DB.report.deleteMany({ userId: userIdToDelete });
+            await DB.taskManager.deleteMany({ userId: userIdToDelete });
 
             return response.OK({ res, message: messages.USER_DELETED_SUCCESSFULLY });
         } catch (error) {
-            console.error("Error deleting user: ", error);
-            return response.INTERNAL_SERVER_ERROR({ res });
+            return response.INTERNAL_SERVER_ERROR({ res, message: error });
         }
+
     },
 
     // Forgot password
