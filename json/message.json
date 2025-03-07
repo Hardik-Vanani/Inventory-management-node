@@ -51,5 +51,7 @@
     "OTP_EXPIRED": "OTP Expired",
     "OTP_VERIFIED": "OTP has been Verified successfully",
     "USER_DEACTIVATED_SUCCESSFULLY": "User Deactivated successfully",
-    "USER_ACTIVATED_SUCCESSFULLY": "User Activated successfully"
+    "USER_ACTIVATED_SUCCESSFULLY": "User Activated successfully",
+    "USER_ALREADY_DEACTIVATED": "User already Deactivated",
+    "USER_ALREADY_ACTIVATED": "User already Activated"
 }

@@ -6,7 +6,10 @@ const upload = require("../middleware/upload.middleware")
 const { USER: { APIS, VALIDATOR } } = require("../controllers");
 
 /* Get APIs*/
+router.get("/data", APIS.getUserData)
+
 router.get("/:id?", auth, APIS.getUser)
+
 
 
 /* Post APIs */
@@ -26,7 +29,9 @@ router.put("/update-profile", auth, upload.single("profileImage"), VALIDATOR.upd
 
 router.put("/reset-password", VALIDATOR.resetPassword, APIS.resetPassword);
 
-router.put("/admin/:id", APIS.deActivateUser)
+router.put("/activate/:id", APIS.activateUser)
+
+router.put("/deactivate/:id", APIS.deActivateUser)
 
 
 

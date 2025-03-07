@@ -27,6 +27,33 @@ module.exports = {
         }
     },
 
+    // Get user data for admin
+    getUserData: async (req, res) => {
+        try {
+            // Fetch all users
+            const users = await DB.user.find().select("-password -otp -otpExpiry -createdAt -updatedAt");
+
+            // Fetch purchase and sale bill counts for each user
+            const userData = await Promise.all(users.map(async (user) => {
+                const purchaseCount = await DB.purchase.countDocuments({ userId: user._id });
+                const saleCount = await DB.sale.countDocuments({ userId: user._id });
+
+                return {
+                    ...user.toObject(), // Convert Mongoose document to plain object
+                    purchaseBillCount: purchaseCount,
+                    saleBillCount: saleCount
+                };
+            }));
+
+            return response.OK({ res, message: messages.USER_FETCHED_SUCCESSFULLY, payload: userData });
+
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            return response.INTERNAL_SERVER_ERROR({ res });
+        }
+    },
+
+
     // Login existing user
     loginUser: async (req, res) => {
         try {
@@ -197,7 +224,7 @@ module.exports = {
         return response.OK({ res, message: messages.PASSWORD_UPDATED_SUCCESSFULLY })
     },
 
-    
+
     deActivateUser: async (req, res) => {
         try {
             const user = await DB.user.findOne({ _id: req.params.id })
@@ -206,12 +233,21 @@ module.exports = {
             if (user.isActive) {
                 await DB.user.findOneAndUpdate({ _id: req.params.id }, { isActive: false }, { new: true })
                 return response.OK({ res, message: messages.USER_DEACTIVATED_SUCCESSFULLY })
-            } else {
-                await DB.user.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { new: true })
-                return response.OK({ res, message: messages.USER_ACTIVATED_SUCCESSFULLY })
-            }
+            } else return response.BAD_REQUEST({ res, message: messages.USER_ALREADY_DEACTIVATED })
+
         } catch (error) {
             return response.INTERNAL_SERVER_ERROR({ res, message: error })
         }
+    },
+
+    activateUser: async (req, res) => {
+        const user = await DB.user.findOne({ _id: req.params.id })
+        if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND })
+
+        if (!user.isActive) {
+            await DB.user.findOneAndUpdate({ _id: req.params.id }, { isActive: true }, { new: true })
+            return response.OK({ res, message: messages.USER_ACTIVATED_SUCCESSFULLY })
+        } else return response.BAD_REQUEST({ res, message: messages.USER_ALREADY_ACTIVATED })
+
     }
 };
