@@ -2,7 +2,6 @@ const moment = require('moment');
 
 module.exports = {
     invoiceHTML: ({ bill }) => {
-        // console.log('bill::: ', bill[0].userId.profileImage);
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -154,7 +153,7 @@ module.exports = {
                     <div class="header-section">
                         <!-- Company Logo on the Left -->
                         <div class="logo">
-                             <img src="https://media.istockphoto.com/id/1401106921/vector/success-growth-design-template.jpg?s=612x612&w=0&k=20&c=4efcYQ2UVbbF4MwNu5WyJVl0eD1NUhcXBc8Y7sCki9Y=" alt="Company Logo" class="logo">
+                            <img src="http://localhost:5500/images/stock.jpg" alt="Company Logo" class="logo">
                         </div>
 
                         <!-- Header Details on the Right -->

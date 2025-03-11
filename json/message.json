@@ -3,7 +3,7 @@
     "USER_ALREADY_EXISTS": "User Already Exists.",
     "USERNAME_ALREADY_EXISTS": "Username Already Exists.",
     "USER_NOT_FOUND": "User not found.",
-    "USER_LOGIN_SUCCESSFULLY": "User logIn successfully",
+    "USER_LOGIN_SUCCESSFULLY": "User login successfully",
     "USER_CREATED_SUCCESSFULLY": "User created successfully",
     "USER_UPDATED_SUCCESSFULLY": "User updated successfully.",
     "USER_FETCHED_SUCCESSFULLY": "User fetched successfully.",
@@ -53,5 +53,6 @@
     "USER_DEACTIVATED_SUCCESSFULLY": "User Deactivated successfully",
     "USER_ACTIVATED_SUCCESSFULLY": "User Activated successfully",
     "USER_ALREADY_DEACTIVATED": "User already Deactivated",
-    "USER_ALREADY_ACTIVATED": "User already Activated"
+    "USER_ALREADY_ACTIVATED": "User already Activated",
+    "USER_DEACTIVATED": "Your account has been temporarily Deactivated for some reason to activate it, please contact our team!"
 }

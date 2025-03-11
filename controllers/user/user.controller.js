@@ -5,7 +5,6 @@ const DB = require("../../models");
 const messages = require('../../json/message.json')
 const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
 const EMAIL = require("../../services/mail/mail.service");
-const { verifyOtp } = require("./user.validator");
 
 
 module.exports = {
@@ -62,6 +61,8 @@ module.exports = {
 
             const user = await DB.user.findOne({ username });
             if (!user) return response.NOT_FOUND({ res, message: messages.USER_NOT_FOUND });
+
+            if (user.isActive === false) return response.BAD_REQUEST({ res, message: messages.USER_DEACTIVATED })
 
             // Compare password with hashed password
             const ismatch = await bcryptjs.compare(password, user.password);
