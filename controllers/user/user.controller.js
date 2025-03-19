@@ -5,6 +5,8 @@ const DB = require("../../models");
 const messages = require('../../json/message.json')
 const { USER_TYPE: { ADMIN } } = require("../../json/enum.json");
 const EMAIL = require("../../services/mail/mail.service");
+const moment = require("moment");
+
 
 
 module.exports = {
@@ -95,7 +97,11 @@ module.exports = {
 
             // Password hashed by bcryptjs
             const hashedPassword = await bcryptjs.hash(password, 10);
-            const newUser = await DB.user.create({ username, password: hashedPassword, email, role });
+
+            // Add 7 day in current date
+            const futureDate = moment().add(7, 'days')
+
+            const newUser = await DB.user.create({ username, password: hashedPassword, email, role, expiryDate: futureDate, plan: "free" });
 
             return response.OK({ res, message: messages.USER_CREATED_SUCCESSFULLY, payload: newUser });
         } catch (error) {

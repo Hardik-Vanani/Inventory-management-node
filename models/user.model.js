@@ -24,6 +24,8 @@ let user_schema = new Schema(
         state: { type: String, },
         shopName: { type: String, },
         profileImage: { type: String, },
+        expiryDate: { type: Date, },
+        plan: { type: String, },
         role: {
             type: String,
             default: USER,

@@ -13,5 +13,6 @@ routes.use("/income", require("./income.routes"));
 routes.use("/chatbot", require("./chatbot.routes"));
 routes.use("/csv", require('./csvDown.routes'))
 routes.use("/invoice", require('./invoice.routes'))
+routes.use("/payment", require('./payment.routes'))
 
 module.exports = routes;

@@ -42,7 +42,9 @@ module.exports = {
             city: Joi.string(),
             state: Joi.string(),
             shopName: Joi.string(),
-            profileImage: Joi.string().allow("")
+            profileImage: Joi.string().allow(""),
+            expiryDate: Joi.date(),
+            plan: Joi.string(),
         })
     }),
 
