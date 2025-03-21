@@ -59,8 +59,7 @@ module.exports = {
             saleBillItems: Joi.array().items(Joi.object({
                 _id: Joi.string()
                     .pattern(/^[0-9a-fA-F]{24}$/)
-                    .message("Invalid ID")
-                    .required(),
+                    .message("Invalid ID"),
                 productId: Joi.string()
                     .pattern(/^[0-9a-fA-F]{24}$/)
                     .message("Invalid ID")

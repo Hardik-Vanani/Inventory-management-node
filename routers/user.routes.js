@@ -36,7 +36,7 @@ router.put("/deactivate/:id", APIS.deActivateUser)
 
 
 /* Delete APIs */
-router.delete("/", auth, APIS.deleteUser);
+router.delete("/delete/:id?", auth, APIS.deleteUser);
 
 
 module.exports = router;

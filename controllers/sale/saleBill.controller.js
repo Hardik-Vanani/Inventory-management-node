@@ -125,57 +125,67 @@ module.exports = {
             const userId = req.user.id;
             const saleBillId = req.params.id;
 
+            // Check if sale bill exists
             const existingSaleBill = await DB.sale.findOne({ _id: saleBillId, userId });
             if (!existingSaleBill) return response.NOT_FOUND({ res, message: messages.SALE_NOT_FOUND });
 
-            let existingSaleItems = await DB.saleItem.find({ saleBillId, userId });
-            let productStockChanges = {};
+            // Retrieve existing sale items to adjust stock
+            const existingItems = await DB.saleItem.find({ saleBillId });
 
-            // Calculate stock changes
-            for (const item of existingSaleItems) {
-                productStockChanges[item.productId] = (productStockChanges[item.productId] || 0) + item.qty;
+            // Restore old stock (increase stock since the sale is being updated)
+            for (const item of existingItems) {
+                await DB.product.findByIdAndUpdate(item.productId, { $inc: { stock: item.qty } }, { new: true });
             }
 
-            let insufficientStockProducts = [];
-            let saleItemUpdates = [];
+            // Delete existing sale items
+            await DB.saleItem.deleteMany({ saleBillId });
 
-            // Validate stock and prepare updates
+            // Check all products existence
+            let productUpdates = [];
             for (const item of saleBillItems) {
                 const product = await DB.product.findOne({ _id: item.productId, userId });
                 if (!product) {
                     return response.NOT_FOUND({ res, message: `Product with ID ${item.productId} not found` });
                 }
 
-                let previousQty = productStockChanges[item.productId] || 0;
-                let newStock = product.stock + previousQty - item.qty;
-
-                if (newStock < 0) {
-                    insufficientStockProducts.push({ productId: item.productId, productName: product.productName, availableStock: product.stock });
-                } else {
-                    saleItemUpdates.push({ saleItemId: item._id, productId: item.productId, qty: item.qty, newStock });
+                // Check if requested quantity is greater than available quantity
+                if (item.qty > product.stock) {
+                    // Minus stock to revert the above process
+                    for (const item of existingItems) {
+                        await DB.product.findByIdAndUpdate(item.productId, { $inc: { stock: -item.qty } }, { new: true });
+                    }
+                    return response.BAD_REQUEST({ res, message: `Insufficient stock for Product ID ${item.productId}. Available quantity: ${product.qty}` });
                 }
+                productUpdates.push({ productId: item.productId, qty: item.qty });
             }
 
-            if (insufficientStockProducts.length > 0) {
-                return response.BAD_REQUEST({ res, message: `Stock is not enough for the following products: ${insufficientStockProducts.map(p => `${p.productName} (Available: ${p.availableStock})`).join(", ")}`, data: insufficientStockProducts });
+            // Update Sale Bill
+            await DB.sale.findByIdAndUpdate(saleBillId, { ...req.body }, { new: true });
+
+            // Create new sale items
+            const newSaleItems = saleBillItems.map(item => ({
+                userId,
+                productId: item.productId,
+                saleBillId,
+                customerId: existingSaleBill.customerId,
+                qty: item.qty,
+                unit: item.unit,
+                rate: item.rate,
+                GSTPercentage: item.GSTPercentage,
+                GSTAmount: item.GSTAmount,
+                amount: item.amount,
+                totalAmount: item.totalAmount,
+            }));
+            await DB.saleItem.insertMany(newSaleItems);
+
+            // Update stock in product model (decrease stock)
+            for (const update of productUpdates) {
+                await DB.product.findByIdAndUpdate(update.productId, { $inc: { stock: -update.qty } }, { new: true });
             }
 
-            // Update sale bill
-            await DB.sale.findByIdAndUpdate(saleBillId, req.body, { new: true });
-
-            // Update sale items and stock
-            for (const update of saleItemUpdates) {
-                await DB.saleItem.findByIdAndUpdate(
-                    update.saleItemId,
-                    { ...req.body, qty: update.qty },
-                    { new: true }
-                );
-                await DB.product.findByIdAndUpdate(update.productId, { stock: update.newStock }, { new: true });
-            }
-
-            // Update transaction report
+            // Update report
             if (await DB.report.findOne({ saleBillId })) {
-                await DB.report.updateOne({ saleBillId }, {
+                await DB.report.findOneAndUpdate({ saleBillId }, {
                     billNo: req.body.billNo,
                     billDate: req.body.billDate,
                     amount: req.body.totalAmount,
