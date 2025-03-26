@@ -33,9 +33,6 @@ app.use("/invoice", express.static(path.join(__dirname, "controllers/invoice/gen
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.post('/api/hey', (req, res) => {
-    res.json({ "ok": "ok" })
-})
 
 // Listen to the port
 app.listen(process.env.PORT, () => {
